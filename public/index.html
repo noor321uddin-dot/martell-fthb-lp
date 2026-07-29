@@ -184,7 +184,92 @@
     </div>
   </div>
 </section>
-    <section id="get-in-touch"></section>
+    <section id="get-in-touch" class="py-20 px-6 bg-white">
+  <div class="max-w-xl mx-auto space-y-6">
+    <h2 class="text-3xl md:text-4xl font-serif">Start your first custom home</h2>
+    <p class="text-sm text-slate-600 italic">Takes 30 seconds — no obligation.</p>
+
+    <form id="lead-form" novalidate class="space-y-5">
+      <label class="block">
+        <span class="text-sm font-semibold">First name</span>
+        <input type="text" name="first_name" required autocomplete="given-name"
+               class="mt-1 w-full border rounded px-3 py-2">
+      </label>
+
+      <label class="block">
+        <span class="text-sm font-semibold">Email</span>
+        <input type="email" name="email" required autocomplete="email"
+               class="mt-1 w-full border rounded px-3 py-2">
+      </label>
+
+      <label class="block">
+        <span class="text-sm font-semibold">Phone <span class="font-normal text-slate-500">(optional — fastest way to hear back)</span></span>
+        <input type="tel" name="phone" autocomplete="tel"
+               class="mt-1 w-full border rounded px-3 py-2">
+      </label>
+
+      <label class="block">
+        <span class="text-sm font-semibold">Community interest</span>
+        <select name="community_interest" class="mt-1 w-full border rounded px-3 py-2">
+          <option value="Not sure yet" selected>Not sure yet</option>
+          <option value="[c1 name]">[c1 name]</option>
+          <option value="[c2 name]">[c2 name]</option>
+          <option value="[c3 name]">[c3 name]</option>
+          <option value="[c4 name]">[c4 name]</option>
+        </select>
+      </label>
+
+      <!-- Hidden attribution fields — populated by attribution.js -->
+      <input type="hidden" name="lead_source" value="fthb_lp">
+      <input type="hidden" name="page_variant" value="lifestyle">
+      <input type="hidden" name="page_url" value="">
+      <input type="hidden" name="gclid" value="">
+      <input type="hidden" name="gbraid" value="">
+      <input type="hidden" name="wbraid" value="">
+      <input type="hidden" name="utm_source" value="">
+      <input type="hidden" name="utm_medium" value="">
+      <input type="hidden" name="utm_campaign" value="">
+      <input type="hidden" name="utm_term" value="">
+      <input type="hidden" name="utm_content" value="">
+      <input type="hidden" name="event_id" value="">
+      <input type="hidden" name="test_lead" value="false">
+      <input type="hidden" name="consent_version" value="2026-07-30">
+      <input type="hidden" name="turnstile_token" value="">
+
+      <!-- Honeypot: visually hidden, screen-reader-hidden -->
+      <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">
+        <label>Website URL <input type="text" name="website_url" tabindex="-1" autocomplete="off"></label>
+      </div>
+
+      <!-- Turnstile mount point — widget injected by form.js -->
+      <div id="turnstile-container"></div>
+
+      <label class="flex items-start gap-3 text-sm">
+        <input id="consent-email" type="checkbox" name="email_consent" required class="mt-1">
+        <span>Yes, send me updates about Martell communities and building my first custom home. I can unsubscribe anytime.</span>
+      </label>
+      <input type="hidden" name="email_consent_text" value="Yes, send me updates about Martell communities and building my first custom home. I can unsubscribe anytime.">
+
+      <label id="sms-consent-wrap" hidden class="flex items-start gap-3 text-sm">
+        <input id="consent-sms" type="checkbox" name="sms_consent" class="mt-1">
+        <span>Text me too — I consent to SMS from Martell. Standard rates may apply. Reply STOP to opt out.</span>
+      </label>
+
+      <button id="submit-btn" type="submit" disabled
+              class="w-full bg-martell-teal text-white font-semibold py-3 rounded disabled:opacity-50">
+        Start my custom home
+      </button>
+
+      <p id="form-error" hidden role="alert" class="text-sm text-red-700 bg-red-50 border border-red-200 rounded p-3"></p>
+    </form>
+
+    <noscript>
+      <p class="text-sm text-slate-700 bg-yellow-50 border rounded p-3">
+        JavaScript is required to submit this form. Call us at [phone] or reach out through martellcustomhomes.com.
+      </p>
+    </noscript>
+  </div>
+</section>
   </main>
   <footer id="footer"></footer>
   <script src="/js/attribution.js" defer></script>

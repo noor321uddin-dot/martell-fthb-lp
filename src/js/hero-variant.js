@@ -28,3 +28,16 @@
     init();
   }
 })();
+
+document.addEventListener("DOMContentLoaded", function () {
+  var emailConsent = document.getElementById("consent-email");
+  var submit = document.getElementById("submit-btn");
+  var phone = document.querySelector('input[name="phone"]');
+  var smsWrap = document.getElementById("sms-consent-wrap");
+  if (emailConsent && submit) {
+    emailConsent.addEventListener("change", function () { submit.disabled = !emailConsent.checked; });
+  }
+  if (phone && smsWrap) {
+    phone.addEventListener("input", function () { smsWrap.hidden = phone.value.trim().length === 0; });
+  }
+});
