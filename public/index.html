@@ -8,6 +8,25 @@
   <link rel="preload" as="image" href="/assets/hero.jpg">
   <link rel="stylesheet" href="/css/tailwind.css">
   <!-- GTM head snippet — replace GTM-XXXXXXX after Task 10 -->
+  <script>
+    window.onTurnstileLoad = function () {
+      if (!window.turnstile) return;
+      var el = document.getElementById("turnstile-container");
+      if (!el) return;
+      window.__turnstileWidgetId = window.turnstile.render(el, {
+        sitekey: "TURNSTILE_SITE_KEY",
+        callback: function (token) {
+          var input = document.querySelector('input[name="turnstile_token"]');
+          if (input) input.value = token;
+        },
+        "error-callback": function () {
+          var input = document.querySelector('input[name="turnstile_token"]');
+          if (input) input.value = "";
+        }
+      });
+    };
+  </script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad" async defer></script>
 </head>
 <body>
   <main>
