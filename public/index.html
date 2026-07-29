@@ -11,7 +11,52 @@
 </head>
 <body>
   <main>
-    <section id="hero"></section>
+    <section id="hero" class="relative">
+  <!-- Shared full-bleed background media -->
+  <div class="absolute inset-0 -z-10">
+    <video id="hero-video" class="w-full h-full object-cover" poster="/assets/hero.jpg" autoplay muted loop playsinline>
+      <source src="/assets/hero.mp4" type="video/mp4">
+    </video>
+    <div class="absolute inset-0 bg-black/40"></div>
+    <button id="hero-play-btn" type="button" hidden aria-label="Play hero video"
+            class="absolute bottom-6 right-6 w-12 h-12 rounded-full bg-white/90 flex items-center justify-center">▶</button>
+  </div>
+
+  <!-- Persistent GST sash -->
+  <div class="absolute top-4 right-4 bg-martell-teal text-white text-sm px-3 py-1 rounded">
+    Ask about the GST rebate on new builds
+  </div>
+
+  <div class="max-w-4xl mx-auto px-6 py-32 text-white space-y-6">
+    <!-- Hero A (default lifestyle) -->
+    <div id="hero-a" data-variant="lifestyle">
+      <h1 class="text-4xl md:text-6xl font-serif leading-tight">
+        Your first custom home — built for you in New Brunswick.
+      </h1>
+      <p class="text-lg md:text-xl max-w-2xl">Custom-built for you, not cookie-cutter. A milestone home, not a starter.</p>
+    </div>
+
+    <!-- Hero B (?v=search) -->
+    <div id="hero-b" data-variant="search" hidden>
+      <h1 class="text-4xl md:text-6xl font-serif leading-tight">
+        Custom-built new homes for your first home in New Brunswick — starting in the $[range]s.
+      </h1>
+      <p class="text-lg md:text-xl max-w-2xl">Custom-built for you, not cookie-cutter.</p>
+    </div>
+
+    <!-- Trust ribbon (shared) -->
+    <div class="flex flex-wrap items-center gap-4 text-sm text-white/90">
+      <span>[N] custom homes built across New Brunswick since [YEAR]</span>
+      <img src="/assets/atlantic-home-warranty.png" alt="Atlantic Home Warranty" class="h-8">
+    </div>
+
+    <!-- Primary CTA (shared) -->
+    <a href="#get-in-touch" data-track="hero_cta_click"
+       class="inline-block bg-martell-teal text-white font-semibold px-6 py-3 rounded">
+      Start my custom home
+    </a>
+  </div>
+</section>
     <section id="communities"></section>
     <section id="gst"></section>
     <section id="why"></section>
