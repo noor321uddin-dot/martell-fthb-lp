@@ -67,9 +67,14 @@ window.onTurnstileLoad = function () {
   --midnight:#0E2622;
   --cream:#F5EFE4;
   --teal:#168876;
+  --teal-deep:#0F6957;
   --whitish:#EDF6F4;
+  --shadow-warm:0 20px 40px -20px rgba(14,38,34,0.18), 0 8px 16px -8px rgba(14,38,34,0.08);
+  --shadow-lift:0 32px 60px -24px rgba(14,38,34,0.28), 0 12px 20px -8px rgba(14,38,34,0.12);
   --serif:'Caudex',Georgia,serif;
   --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --ease-out:cubic-bezier(0.22,1,0.36,1);
+  --ease-in-out:cubic-bezier(0.65,0,0.35,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
@@ -82,7 +87,7 @@ a{color:inherit;text-decoration:none}
 /* ------- Type ------- */
 .serif{font-family:var(--serif);font-weight:500;letter-spacing:-0.015em;line-height:0.98}
 .italic-teal{font-style:italic;color:var(--teal);font-weight:400}
-.numeral{font-family:var(--serif);font-weight:400;font-size:0.82rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--teal)}
+.numeral{font-family:var(--serif);font-weight:400;font-size:0.82rem;letter-spacing:0.32em;text-transform:uppercase;color:var(--teal);display:inline-block}
 .small-caps{font-family:var(--sans);font-size:0.78rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:500}
 
 /* ------- Chapter shell ------- */
@@ -91,19 +96,32 @@ a{color:inherit;text-decoration:none}
 .chapter.light{background:var(--cream);color:var(--midnight)}
 .chapter.dark .numeral{color:var(--teal)}
 .wrap{width:100%;max-width:88rem;margin:0 auto;padding:0 2rem}
-@media(max-width:640px){.wrap{padding:0 1.5rem}.chapter{padding:5rem 0}}
+@media(max-width:640px){.wrap{padding:0 1.5rem}.chapter{padding:5rem 0;min-height:auto}}
 
 .h2{font-family:var(--serif);font-weight:500;font-size:clamp(2.6rem,7.5vw,7rem);line-height:0.96;letter-spacing:-0.02em;text-wrap:balance}
 .h3{font-family:var(--serif);font-weight:500;font-size:clamp(2rem,4vw,3.4rem);line-height:1.04;letter-spacing:-0.015em}
 .lede{max-width:42ch;font-size:1.0625rem;line-height:1.75;margin-top:1.75rem;color:inherit;opacity:0.86}
 .chapter.dark .lede{opacity:0.78}
 
-/* ------- Reveal (motion) ------- */
-.rise{opacity:0;transform:translateY(24px);transition:opacity 1.1s cubic-bezier(0.22,1,0.36,1),transform 1.1s cubic-bezier(0.22,1,0.36,1)}
-.rise.in{opacity:1;transform:none}
-.rise.d1{transition-delay:0.12s}
-.rise.d2{transition-delay:0.24s}
-.rise.d3{transition-delay:0.36s}
+/* ------- Reveal motion helper ------- */
+[data-reveal]{opacity:0;transform:translateY(28px) scale(0.985);transition:opacity 900ms var(--ease-out),transform 900ms var(--ease-out);will-change:opacity,transform}
+[data-reveal].revealed{opacity:1;transform:none}
+[data-reveal-fade]{opacity:0;transition:opacity 700ms var(--ease-out)}
+[data-reveal-fade].revealed{opacity:1}
+[data-underline]{background-image:linear-gradient(var(--teal),var(--teal));background-position:0 100%;background-repeat:no-repeat;background-size:0 2px;transition:background-size 900ms var(--ease-out) 300ms;padding-bottom:2px}
+[data-underline].revealed{background-size:100% 2px}
+
+/* ------- Chapter dot indicator ------- */
+.chapter-dots{position:fixed;top:50%;right:1.75rem;transform:translateY(-50%);z-index:70;display:none;flex-direction:column;gap:0.7rem;padding:0.5rem 0}
+@media(min-width:900px){.chapter-dots{display:flex}}
+.chapter-dot{width:8px;height:8px;border-radius:9999px;background:rgba(14,38,34,0.22);border:0;padding:0;cursor:pointer;transition:all 350ms var(--ease-out);position:relative}
+.chapter-dot:hover{background:rgba(22,136,118,0.55);transform:scale(1.3)}
+.chapter-dot.active{background:var(--teal);transform:scale(1.4)}
+.chapter-dot.dark-mode{background:rgba(237,246,244,0.28)}
+.chapter-dot.dark-mode.active{background:var(--teal)}
+.chapter-dot::after{content:attr(data-label);position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--midnight);opacity:0;pointer-events:none;white-space:nowrap;transition:opacity 250ms}
+.chapter-dot.dark-mode::after{color:var(--whitish)}
+.chapter-dot:hover::after{opacity:0.85}
 
 /* ------- Nav ------- */
 .nav{position:fixed;top:0;left:0;right:0;z-index:80;padding:1.25rem 0;transition:all 0.4s ease;background:transparent}
@@ -118,109 +136,189 @@ a{color:inherit;text-decoration:none}
 .nav-link:hover{color:var(--whitish)}
 .nav.solid-light .nav-link{color:rgba(14,38,34,0.7)}
 .nav.solid-light .nav-link:hover{color:var(--teal)}
-.nav-cta{font-size:0.9rem;letter-spacing:0.06em;color:var(--whitish);border-bottom:1px solid rgba(237,246,244,0.4);padding-bottom:2px;transition:all 0.3s}
+.nav-cta{font-size:0.9rem;letter-spacing:0.06em;color:var(--whitish);border-bottom:1px solid rgba(237,246,244,0.4);padding-bottom:2px;transition:all 0.3s;display:inline-flex;align-items:center;gap:0.35rem}
 .nav.solid-light .nav-cta{color:var(--midnight);border-color:rgba(14,38,34,0.4)}
-.nav-cta:hover{color:var(--teal);border-color:var(--teal)}
+.nav-cta:hover{color:var(--teal);border-color:var(--teal);gap:0.6rem}
 @media(max-width:640px){.nav-inner{padding:0 1.5rem}.nav-brand{font-size:0.9rem}}
 
-/* ------- Link mark (teal underline arrow link) ------- */
-.mark{display:inline-flex;align-items:baseline;gap:0.5rem;font-size:0.95rem;letter-spacing:0.04em;color:var(--teal);border-bottom:1px solid var(--teal);padding-bottom:3px;transition:gap 0.3s,color 0.3s;font-family:var(--sans);font-weight:500}
-.mark:hover{gap:0.85rem}
+/* ------- Link mark ------- */
+.mark{display:inline-flex;align-items:baseline;gap:0.5rem;font-size:0.95rem;letter-spacing:0.04em;color:var(--teal);border-bottom:1px solid var(--teal);padding-bottom:3px;transition:gap 0.3s var(--ease-out),color 0.3s,letter-spacing 0.3s;font-family:var(--sans);font-weight:500}
+.mark:hover{gap:0.95rem;letter-spacing:0.06em}
 .chapter.dark .mark{color:var(--whitish);border-color:rgba(237,246,244,0.6)}
 .chapter.dark .mark:hover{color:var(--whitish);border-color:var(--whitish)}
-.mark svg{width:0.75rem;height:0.75rem;transform:translateY(-1px)}
+.mark svg{width:0.8rem;height:0.8rem;transform:translateY(-1px);transition:transform 0.3s var(--ease-out)}
+.mark:hover svg{transform:translate(3px,-1px)}
 
-/* ------- Outlined CTA (hero) ------- */
-.cta-outline{display:inline-flex;align-items:center;gap:0.85rem;padding:1.1rem 2rem;border:1px solid rgba(237,246,244,0.5);color:var(--whitish);font-size:0.95rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;transition:all 0.4s ease;background:transparent}
-.cta-outline:hover{border-color:var(--whitish);background:rgba(237,246,244,0.06);letter-spacing:0.18em}
-.cta-outline svg{width:0.85rem;height:0.85rem}
+/* ------- CTA outline (hero) ------- */
+.cta-outline{display:inline-flex;align-items:center;gap:0.85rem;padding:1.15rem 2rem;border:1px solid rgba(237,246,244,0.55);color:var(--whitish);font-size:0.95rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;transition:all 0.4s var(--ease-out);background:transparent;position:relative;overflow:hidden}
+.cta-outline::before{content:"";position:absolute;inset:0;background:var(--whitish);transform:translateX(-101%);transition:transform 0.5s var(--ease-in-out);z-index:-1}
+.cta-outline:hover{color:var(--midnight);border-color:var(--whitish);letter-spacing:0.18em}
+.cta-outline:hover::before{transform:none}
+.cta-outline svg{width:0.85rem;height:0.85rem;transition:transform 0.35s var(--ease-out)}
+.cta-outline:hover svg{transform:translateX(4px)}
 
-/* ------- CH 01 HERO ------- */
+/* ------- HERO ------- */
 #ch-hero{padding:0;background:#000}
 .hero-media{position:absolute;inset:0;z-index:0}
 .hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover}
-.hero-media video{animation:kenburns 24s ease-in-out infinite alternate}
-@keyframes kenburns{from{transform:scale(1.0)}to{transform:scale(1.08)}}
-.hero-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(14,38,34,0.55) 0%,rgba(14,38,34,0.32) 40%,rgba(14,38,34,0.7) 100%)}
+.hero-media video{animation:kenburns 28s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1.0)}to{transform:scale(1.09)}}
+.hero-shade{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(14,38,34,0.55) 0%,rgba(14,38,34,0.32) 40%,rgba(14,38,34,0.72) 100%)}
 .hero-inner{position:relative;z-index:2;min-height:100svh;display:flex;align-items:center;padding:0 2rem}
 .hero-content{max-width:62rem;color:var(--whitish)}
-.hero-content .numeral{color:var(--whitish);opacity:0.8}
+.hero-content .numeral{color:var(--whitish);opacity:0.85}
 .hero-h1{font-family:var(--serif);font-weight:500;font-size:clamp(3rem,9vw,8.5rem);line-height:0.94;letter-spacing:-0.025em;margin-top:1.5rem;color:var(--whitish);text-wrap:balance}
-.hero-sub{margin-top:2rem;max-width:38rem;font-size:1.125rem;line-height:1.7;color:rgba(237,246,244,0.88);text-wrap:pretty}
-.hero-cta-wrap{margin-top:3rem}
+.hero-sub{margin-top:2rem;max-width:38rem;font-size:1.125rem;line-height:1.7;color:rgba(237,246,244,0.9);text-wrap:pretty}
+.hero-cta-wrap{margin-top:3rem;display:flex;gap:1.25rem;flex-wrap:wrap;align-items:center}
 #hero-b{display:none}
-.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:1rem;color:rgba(237,246,244,0.7);font-size:0.75rem;letter-spacing:0.32em;text-transform:uppercase}
-.hero-scroll::before{content:"";width:1px;height:3rem;background:linear-gradient(to bottom,transparent,rgba(237,246,244,0.6));display:block}
-#hero-play-btn{position:absolute;bottom:2rem;right:2rem;z-index:3;height:3rem;width:3rem;border-radius:9999px;background:rgba(237,246,244,0.9);color:var(--midnight);display:inline-flex;align-items:center;justify-content:center}
+.hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:0.9rem;color:rgba(237,246,244,0.7);font-size:0.72rem;letter-spacing:0.32em;text-transform:uppercase;animation:heroScrollFade 3.6s ease-in-out infinite}
+@keyframes heroScrollFade{0%,100%{opacity:0.55}50%{opacity:1}}
+.hero-scroll::before{content:"";width:1px;height:3rem;background:linear-gradient(to bottom,transparent,rgba(237,246,244,0.7));display:block}
+#hero-play-btn{position:absolute;bottom:2rem;right:2rem;z-index:3;height:3rem;width:3rem;border-radius:9999px;background:rgba(237,246,244,0.9);color:var(--midnight);display:inline-flex;align-items:center;justify-content:center;transition:transform 0.3s}
+#hero-play-btn:hover{transform:scale(1.08)}
+.hero-cta-sub{color:rgba(237,246,244,0.65);font-size:0.85rem;letter-spacing:0.04em;font-family:var(--serif);font-style:italic}
 @media(max-width:640px){.hero-inner{padding:0 1.5rem}.hero-scroll{bottom:1.5rem}}
 
-/* ------- CH 02 & split chapters ------- */
+/* ------- Story / Chapter 02 ------- */
 .split{display:grid;grid-template-columns:1fr;gap:3rem;align-items:center}
 @media(min-width:960px){.split{grid-template-columns:1fr 1fr;gap:5rem}}
 .split.reverse .split-media{order:-1}
 @media(min-width:960px){.split.reverse .split-media{order:2}}
-.split-text{max-width:34rem}
-.split-media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--midnight)}
+.split-text{max-width:36rem}
+.split-media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--midnight);border-radius:1rem;box-shadow:var(--shadow-warm)}
 @media(min-width:960px){.split-media{aspect-ratio:4/5;max-height:78vh}}
-.split-media img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease}
-.split-media:hover img{transform:scale(1.04)}
-.chapter.dark .split-media{background:var(--cream)}
+.split-media img{width:100%;height:100%;object-fit:cover;transition:transform 1.8s var(--ease-out)}
+.split-media:hover img{transform:scale(1.05)}
+.chapter.dark .split-media{background:var(--cream);box-shadow:0 30px 80px -30px rgba(0,0,0,0.55)}
 
-/* ------- CH 02 stats line ------- */
-.stats-line{margin-top:2rem;font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--teal);letter-spacing:0.01em}
+.stats-row{margin-top:2.5rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:34rem}
+.stat-card{padding:1.4rem 1rem 1.3rem;border:1px solid rgba(14,38,34,0.1);border-radius:0.9rem;background:rgba(255,255,255,0.35);text-align:left;transition:transform 350ms var(--ease-out),box-shadow 350ms var(--ease-out),border-color 350ms}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-warm);border-color:rgba(22,136,118,0.35)}
+.stat-num{font-family:var(--serif);font-weight:500;font-size:clamp(2.4rem,5vw,3.4rem);line-height:1;color:var(--teal);letter-spacing:-0.02em}
+.stat-label{margin-top:0.4rem;font-size:0.72rem;letter-spacing:0.22em;text-transform:uppercase;font-weight:500;color:rgba(14,38,34,0.6)}
 
-/* ------- Community chapters (03-07) ------- */
+/* ------- Communities switcher (Chapter 03) ------- */
+.comm-wrap{position:relative}
+.comm-stage{display:grid;grid-template-columns:1fr;gap:3rem;align-items:center;min-height:60svh}
+@media(min-width:960px){.comm-stage{grid-template-columns:1fr 1fr;gap:5rem}}
+.comm-copy{position:relative;min-height:24rem}
+.comm-panel{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:opacity 500ms var(--ease-out),transform 500ms var(--ease-out);pointer-events:none}
+.comm-panel.active{opacity:1;transform:none;pointer-events:auto}
+.comm-panel .h3{margin-top:1.5rem}
+.comm-media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--cream);border-radius:1rem;box-shadow:0 30px 80px -30px rgba(0,0,0,0.55)}
+@media(min-width:960px){.comm-media{max-height:78vh}}
+.comm-slide{position:absolute;inset:0;opacity:0;transition:opacity 600ms var(--ease-out),transform 1.6s var(--ease-out)}
+.comm-slide.active{opacity:1}
+.comm-slide img{width:100%;height:100%;object-fit:cover;transition:transform 6s var(--ease-out)}
+.comm-slide.active img{transform:scale(1.06)}
+
+.comm-switcher{margin-top:3rem;display:flex;flex-direction:column;gap:1rem;padding-top:2rem;border-top:1px solid rgba(237,246,244,0.15)}
+.comm-tabs{display:flex;flex-wrap:wrap;gap:0.5rem}
+.comm-tab{padding:0.7rem 1.1rem;border:1px solid rgba(237,246,244,0.22);color:rgba(237,246,244,0.72);font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;border-radius:9999px;transition:all 300ms var(--ease-out);cursor:pointer;background:transparent}
+.comm-tab:hover{color:var(--whitish);border-color:rgba(237,246,244,0.55);transform:translateY(-1px)}
+.comm-tab.active{background:var(--teal);color:var(--whitish);border-color:var(--teal)}
+.comm-progress{height:2px;background:rgba(237,246,244,0.12);position:relative;overflow:hidden;border-radius:9999px}
+.comm-progress-bar{position:absolute;inset:0 auto 0 0;width:0;background:var(--teal);transition:width 100ms linear}
+
 .city{margin-top:1.25rem;letter-spacing:0.28em;text-transform:uppercase;font-size:0.8rem;color:inherit;opacity:0.72;font-weight:500}
 .chapter.dark .city{opacity:0.7}
-.price{margin-top:0.75rem;font-family:var(--serif);font-size:1.35rem;color:var(--teal)}
-.chapter.dark .price{color:var(--whitish);font-style:italic}
-.hook{margin-top:1.5rem;font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.4;opacity:0.9;max-width:26rem}
+.price{margin-top:0.75rem;font-family:var(--serif);font-size:1.35rem;color:var(--whitish);font-style:italic}
+.hook{margin-top:1.5rem;font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.4;opacity:0.92;max-width:26rem}
 .chips{margin-top:2rem;display:flex;flex-wrap:wrap;gap:0.5rem}
-.chip{border:1px solid currentColor;padding:0.4rem 0.9rem;font-size:0.78rem;letter-spacing:0.08em;opacity:0.7;font-family:var(--sans);text-transform:uppercase;font-weight:500}
-.ribbon{display:inline-block;margin-top:1rem;padding:0.4rem 0.85rem;background:var(--teal);color:var(--whitish);font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:500}
+.chip{border:1px solid currentColor;padding:0.4rem 0.9rem;font-size:0.78rem;letter-spacing:0.08em;opacity:0.72;font-family:var(--sans);text-transform:uppercase;font-weight:500;border-radius:9999px;transition:opacity 300ms}
+.chip:hover{opacity:1}
+.ribbon{display:inline-block;margin-top:1rem;padding:0.4rem 0.85rem;background:var(--teal);color:var(--whitish);font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;border-radius:9999px}
 
-/* ------- CH 08 GST (empty scene) ------- */
-.gst-scene{max-width:64rem;margin:0 auto;text-align:left}
+/* ------- GST module (Chapter 04) ------- */
+.gst-scene{max-width:64rem;margin:0 auto}
 .gst-h2{font-family:var(--serif);font-weight:500;font-size:clamp(2.4rem,7vw,6rem);line-height:1.02;letter-spacing:-0.02em;margin-top:1.5rem;text-wrap:balance}
 .gst-body{margin-top:2.25rem;max-width:44ch;font-size:1.0625rem;line-height:1.75;opacity:0.82}
-.gst-cta{margin-top:2.5rem}
-.gst-foot{margin-top:5rem;padding-top:1.5rem;border-top:1px solid rgba(14,38,34,0.12);font-size:0.8rem;line-height:1.65;color:rgba(14,38,34,0.55);max-width:44rem}
-.gst-foot a{color:var(--teal);border-bottom:1px solid rgba(22,136,118,0.4)}
 
-/* ------- CH 09 testimonial ------- */
+.gst-calc{margin-top:3.5rem;padding:2.5rem;background:rgba(255,255,255,0.55);border:1px solid rgba(14,38,34,0.1);border-radius:1.25rem;box-shadow:var(--shadow-warm);transition:box-shadow 400ms var(--ease-out)}
+.gst-calc:hover{box-shadow:var(--shadow-lift)}
+@media(max-width:640px){.gst-calc{padding:1.75rem}}
+.gst-calc-label{font-size:0.72rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:rgba(14,38,34,0.55)}
+.gst-price-row{margin-top:0.85rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap}
+.gst-step{width:2.4rem;height:2.4rem;border-radius:9999px;border:1px solid rgba(14,38,34,0.2);color:var(--midnight);display:inline-flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all 250ms var(--ease-out);cursor:pointer;flex-shrink:0}
+.gst-step:hover{border-color:var(--teal);color:var(--teal);transform:scale(1.06)}
+.gst-step:active{transform:scale(0.94)}
+.gst-price-display{font-family:var(--serif);font-size:clamp(1.6rem,3.2vw,2.2rem);color:var(--midnight);flex:1;min-width:8rem;letter-spacing:-0.01em}
+#gst-price{width:100%;background:transparent;border:0;font-family:var(--serif);font-size:inherit;color:inherit;font-weight:500;padding:0.3rem 0;letter-spacing:-0.01em}
+#gst-price:focus{outline:0;color:var(--teal)}
+#gst-slider{width:100%;margin-top:1rem;-webkit-appearance:none;appearance:none;height:3px;background:linear-gradient(to right,var(--teal) 0%,var(--teal) var(--fill,20%),rgba(14,38,34,0.15) var(--fill,20%),rgba(14,38,34,0.15) 100%);border-radius:9999px;outline:0;cursor:pointer}
+#gst-slider::-webkit-slider-thumb{-webkit-appearance:none;height:1.35rem;width:1.35rem;border-radius:9999px;background:var(--midnight);border:3px solid var(--cream);box-shadow:0 4px 10px rgba(14,38,34,0.3);cursor:grab;transition:transform 200ms}
+#gst-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
+#gst-slider::-moz-range-thumb{height:1.35rem;width:1.35rem;border-radius:9999px;background:var(--midnight);border:3px solid var(--cream);box-shadow:0 4px 10px rgba(14,38,34,0.3);cursor:grab}
+
+.gst-range-labels{display:flex;justify-content:space-between;margin-top:0.5rem;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(14,38,34,0.4)}
+
+.gst-output{margin-top:2.5rem;padding-top:2rem;border-top:1px dashed rgba(14,38,34,0.15)}
+.gst-output-label{font-size:0.72rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:rgba(14,38,34,0.55)}
+.gst-output-num{font-family:var(--serif);font-weight:500;font-size:clamp(3rem,8vw,5.5rem);line-height:1;color:var(--teal);letter-spacing:-0.02em;margin-top:0.75rem;font-variant-numeric:tabular-nums;transition:color 250ms}
+.gst-output-num.zero{color:rgba(14,38,34,0.35)}
+.gst-output-context{margin-top:1rem;font-family:var(--serif);font-style:italic;font-size:1.05rem;line-height:1.55;color:rgba(14,38,34,0.75);max-width:36rem}
+.gst-output-cta{margin-top:2rem}
+
+.gst-foot{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid rgba(14,38,34,0.12);font-size:0.8rem;line-height:1.65;color:rgba(14,38,34,0.55);max-width:44rem}
+.gst-foot a{color:var(--teal);border-bottom:1px solid rgba(22,136,118,0.4);transition:border-color 250ms}
+.gst-foot a:hover{border-color:var(--teal)}
+
+/* ------- Testimonial ------- */
 .test-inner{max-width:70rem;margin:0 auto;text-align:center}
-.test-video-card{position:relative;aspect-ratio:16/9;max-width:56rem;margin:2.5rem auto 0;overflow:hidden;background:#000;box-shadow:0 40px 100px -30px rgba(0,0,0,0.6)}
-.test-video-card img,.test-video-card iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}
+.test-video-card{position:relative;aspect-ratio:16/9;max-width:56rem;margin:2.5rem auto 0;overflow:hidden;background:#000;border-radius:1rem;box-shadow:0 40px 100px -30px rgba(0,0,0,0.6);transition:transform 500ms var(--ease-out),box-shadow 500ms var(--ease-out)}
+.test-video-card:hover{transform:translateY(-4px);box-shadow:0 50px 120px -30px rgba(0,0,0,0.7)}
+.test-video-card img,.test-video-card iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0;transition:transform 1.8s var(--ease-out)}
+.test-video-card:hover img{transform:scale(1.03)}
 .play-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;background:rgba(14,38,34,0.28);transition:background 0.3s}
 .play-btn:hover{background:rgba(14,38,34,0.15)}
-.play-btn span{display:inline-flex;height:5.5rem;width:5.5rem;align-items:center;justify-content:center;border-radius:9999px;background:rgba(237,246,244,0.92);color:var(--midnight);transition:transform 0.4s ease}
-.play-btn:hover span{transform:scale(1.08)}
+.play-btn span{display:inline-flex;height:5.5rem;width:5.5rem;align-items:center;justify-content:center;border-radius:9999px;background:rgba(237,246,244,0.92);color:var(--midnight);transition:transform 0.45s var(--ease-out);animation:playPulse 2.6s ease-in-out infinite}
+@keyframes playPulse{0%,100%{box-shadow:0 0 0 0 rgba(237,246,244,0.5)}50%{box-shadow:0 0 0 18px rgba(237,246,244,0)}}
+.play-btn:hover span{transform:scale(1.1);animation-play-state:paused}
 .play-btn svg{width:1.4rem;height:1.4rem;margin-left:3px;fill:currentColor}
-.quote{margin-top:4rem;font-family:var(--serif);font-style:italic;font-size:clamp(1.3rem,2.4vw,1.85rem);line-height:1.45;max-width:44rem;margin-left:auto;margin-right:auto;color:var(--whitish);text-wrap:balance}
-.quote-attr{margin-top:1.5rem;font-size:0.82rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(237,246,244,0.6)}
 
-/* ------- CH 10 form ------- */
+.quote-rotator{position:relative;min-height:11rem;margin-top:4rem;max-width:48rem;margin-left:auto;margin-right:auto}
+.quote-slide{position:absolute;inset:0;opacity:0;transform:translateY(10px);transition:opacity 700ms var(--ease-out),transform 700ms var(--ease-out)}
+.quote-slide.active{opacity:1;transform:none}
+.quote{font-family:var(--serif);font-style:italic;font-size:clamp(1.3rem,2.4vw,1.85rem);line-height:1.45;color:var(--whitish);text-wrap:balance}
+.quote-attr{margin-top:1.5rem;font-size:0.82rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(237,246,244,0.6)}
+.quote-dots{margin-top:3.5rem;display:flex;justify-content:center;gap:0.6rem}
+.quote-dot{width:8px;height:8px;border-radius:9999px;background:rgba(237,246,244,0.25);border:0;padding:0;cursor:pointer;transition:all 300ms var(--ease-out)}
+.quote-dot:hover{background:rgba(237,246,244,0.55)}
+.quote-dot.active{background:var(--teal);width:20px;border-radius:9999px}
+
+/* ------- Form ------- */
 .form-scene{max-width:44rem;margin:0 auto}
 .form-scene .h2{font-size:clamp(2.4rem,6vw,5rem)}
 .form-sub{margin-top:1.5rem;font-size:1.0625rem;line-height:1.7;opacity:0.8}
 .form-micro{margin-top:3rem;font-family:var(--serif);font-style:italic;font-size:0.95rem;color:var(--teal);opacity:0.9}
 .contact-form{margin-top:2rem;display:flex;flex-direction:column;gap:1.75rem}
 .field{position:relative}
-.field label{display:block;font-size:0.72rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:rgba(14,38,34,0.55);margin-bottom:0.65rem}
+.field label{display:block;font-size:0.72rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:rgba(14,38,34,0.55);margin-bottom:0.65rem;transition:color 300ms}
+.field:focus-within label{color:var(--teal)}
 .field .req{color:var(--teal)}
 .field .opt{color:rgba(14,38,34,0.4);text-transform:none;letter-spacing:normal;font-size:0.75rem;font-weight:400;margin-left:0.4rem}
-.field input,.field select{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(14,38,34,0.25);padding:0.75rem 0;font-size:1.0625rem;color:var(--midnight);font-family:inherit;transition:border-color 0.3s;border-radius:0}
+.field input,.field select{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(14,38,34,0.25);padding:0.75rem 0;font-size:1.0625rem;color:var(--midnight);font-family:inherit;transition:border-color 0.35s var(--ease-out);border-radius:0}
 .field input::placeholder{color:rgba(14,38,34,0.3)}
 .field input:focus,.field select:focus{outline:0;border-bottom-color:var(--teal)}
+.field .field-underline{position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--teal);transition:width 0.4s var(--ease-out)}
+.field:focus-within .field-underline{width:100%}
 .field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230E2622' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 0 center;background-size:1rem;padding-right:1.5rem}
-.consent-row{display:flex;align-items:flex-start;gap:0.75rem;font-size:0.92rem;line-height:1.55;color:rgba(14,38,34,0.85);margin-top:0.5rem}
-.consent-row input[type="checkbox"]{margin-top:0.25rem;accent-color:var(--teal);width:1.05rem;height:1.05rem;flex-shrink:0}
-.submit{margin-top:1rem;display:inline-flex;align-items:center;justify-content:center;gap:0.85rem;padding:1.15rem 2rem;background:var(--midnight);color:var(--whitish);font-size:0.95rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;transition:all 0.3s;border:0;font-family:inherit}
+.consent-row{display:flex;align-items:flex-start;gap:0.75rem;font-size:0.92rem;line-height:1.55;color:rgba(14,38,34,0.85);margin-top:0.5rem;cursor:pointer}
+.consent-row input[type="checkbox"]{margin-top:0.25rem;accent-color:var(--teal);width:1.05rem;height:1.05rem;flex-shrink:0;transition:transform 200ms}
+.consent-row input[type="checkbox"]:checked{transform:scale(1.05)}
+.submit{margin-top:1rem;display:inline-flex;align-items:center;justify-content:center;gap:0.85rem;padding:1.2rem 2rem;background:var(--midnight);color:var(--whitish);font-size:0.95rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;transition:all 0.35s var(--ease-out);border:0;font-family:inherit;border-radius:9999px;position:relative;overflow:hidden}
+.submit svg{width:0.9rem;height:0.9rem;transition:transform 0.35s var(--ease-out)}
 .submit:hover:not(:disabled){background:var(--teal);letter-spacing:0.2em}
+.submit:hover:not(:disabled) svg{transform:translateX(4px)}
 .submit:disabled{opacity:0.45;cursor:not-allowed}
-.form-error{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:0.8rem 1rem;font-size:0.9rem}
+
+.trust-strip{margin-top:2rem;display:flex;flex-wrap:wrap;gap:0.6rem}
+.trust-pill{display:inline-flex;align-items:center;gap:0.45rem;padding:0.5rem 0.9rem;border:1px solid rgba(14,38,34,0.15);border-radius:9999px;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;color:rgba(14,38,34,0.7);background:rgba(255,255,255,0.35)}
+.trust-pill svg{width:0.85rem;height:0.85rem;color:var(--teal)}
+
+.form-error{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:0.8rem 1rem;font-size:0.9rem;border-radius:0.5rem}
 .honeypot{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.noscript-fallback{margin-top:1rem;font-size:0.9rem;color:rgba(14,38,34,0.65);background:#fef9c3;border:1px solid #fde68a;padding:0.85rem 1rem}
+.noscript-fallback{margin-top:1rem;font-size:0.9rem;color:rgba(14,38,34,0.65);background:#fef9c3;border:1px solid #fde68a;padding:0.85rem 1rem;border-radius:0.5rem}
 
 /* ------- Footer ------- */
 .footer{background:var(--midnight);color:rgba(237,246,244,0.7);padding:5rem 0 3rem;border-top:1px solid rgba(237,246,244,0.06)}
@@ -230,21 +328,24 @@ a{color:inherit;text-decoration:none}
 .footer-tag{margin-top:1.25rem;font-family:var(--serif);font-style:italic;font-size:1.1rem;color:rgba(237,246,244,0.85)}
 .footer-h{font-size:0.72rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--whitish);margin-bottom:1rem;font-weight:500}
 .footer-list{display:flex;flex-direction:column;gap:0.6rem;font-size:0.92rem}
+.footer-list a{transition:color 250ms}
 .footer-list a:hover{color:var(--teal)}
 .footer-socials{margin-top:1.75rem;display:flex;gap:1rem}
-.footer-socials a{display:inline-flex;height:2.25rem;width:2.25rem;align-items:center;justify-content:center;border:1px solid rgba(237,246,244,0.2);color:rgba(237,246,244,0.7);transition:all 0.3s}
-.footer-socials a:hover{border-color:var(--teal);color:var(--teal)}
+.footer-socials a{display:inline-flex;height:2.25rem;width:2.25rem;align-items:center;justify-content:center;border:1px solid rgba(237,246,244,0.2);color:rgba(237,246,244,0.7);transition:all 0.3s;border-radius:9999px}
+.footer-socials a:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-2px)}
 .footer-socials svg{width:1rem;height:1rem}
 .footer-bottom{max-width:88rem;margin:4rem auto 0;padding:2rem 2rem 0;border-top:1px solid rgba(237,246,244,0.08);display:flex;flex-direction:column;gap:1rem;font-size:0.78rem;line-height:1.65;color:rgba(237,246,244,0.45)}
 @media(min-width:900px){.footer-bottom{flex-direction:row;justify-content:space-between;align-items:flex-start}}
 .footer-disc{max-width:52rem}
-.footer-back{color:rgba(237,246,244,0.6);border-bottom:1px solid rgba(237,246,244,0.3);padding-bottom:2px;align-self:flex-start}
+.footer-back{color:rgba(237,246,244,0.6);border-bottom:1px solid rgba(237,246,244,0.3);padding-bottom:2px;align-self:flex-start;transition:all 250ms}
 .footer-back:hover{color:var(--teal);border-color:var(--teal)}
 
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;scroll-behavior:auto !important}
-  .rise{opacity:1;transform:none}
+  [data-reveal],[data-reveal-fade]{opacity:1 !important;transform:none !important}
+  [data-underline]{background-size:100% 2px !important}
   .hero-media video{animation:none}
+  .play-btn span{animation:none}
 }
 </style>
 </head>
@@ -261,8 +362,18 @@ a{color:inherit;text-decoration:none}
       <a class="nav-link" href="#ch-gst" data-track="nav_link_click" data-nav-target="gst">GST rebate</a>
       <a class="nav-link" href="#get-in-touch" data-track="nav_link_click" data-nav-target="contact">Contact</a>
     </div>
-    <a class="nav-cta" href="#get-in-touch" data-track="nav_link_click" data-nav-target="start">Start →</a>
+    <a class="nav-cta" href="#get-in-touch" data-track="nav_link_click" data-nav-target="start">Start <span aria-hidden="true">→</span></a>
   </div>
+</nav>
+
+<!-- Chapter dot indicator -->
+<nav class="chapter-dots" aria-label="Chapter navigation" id="chapter-dots">
+  <button class="chapter-dot active" data-target="#ch-hero" data-label="Hero" aria-label="Go to hero"></button>
+  <button class="chapter-dot" data-target="#ch-story" data-label="Story" aria-label="Go to story"></button>
+  <button class="chapter-dot" data-target="#ch-communities" data-label="Communities" aria-label="Go to communities"></button>
+  <button class="chapter-dot" data-target="#ch-gst" data-label="GST" aria-label="Go to GST rebate"></button>
+  <button class="chapter-dot" data-target="#ch-homeowners" data-label="Homeowners" aria-label="Go to homeowners"></button>
+  <button class="chapter-dot" data-target="#get-in-touch" data-label="Talk" aria-label="Go to contact"></button>
 </nav>
 
 <!-- ===== CH 01 · HERO ===== -->
@@ -273,244 +384,253 @@ a{color:inherit;text-decoration:none}
   <div class="hero-shade"></div>
   <button id="hero-play-btn" type="button" hidden aria-label="Play hero video"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><polygon points="6,4 20,12 6,20"/></svg></button>
   <div class="hero-inner">
-    <div class="hero-content rise in">
-      <span class="numeral">01 &nbsp;—&nbsp; Beginning</span>
+    <div class="hero-content">
+      <span class="numeral" data-reveal>01 &nbsp;—&nbsp; Beginning</span>
       <div id="hero-a" data-variant="lifestyle">
-        <h1 class="hero-h1">Your first <em class="italic-teal">custom</em> home.</h1>
+        <h1 class="hero-h1" data-reveal style="transition-delay:120ms">Your first <em class="italic-teal">custom</em> home.</h1>
       </div>
       <div id="hero-b" data-variant="search">
-        <h1 class="hero-h1">Custom-built new homes for your first home in <em class="italic-teal">New Brunswick</em> — starting in the $[range]s.</h1>
+        <h1 class="hero-h1" data-reveal style="transition-delay:120ms">Custom-built new homes for your first home in <em class="italic-teal">New Brunswick</em> — starting in the $[range]s.</h1>
       </div>
-      <p class="hero-sub">Built with a Martell team that stays with you from land to keys, across five communities in New Brunswick.</p>
-      <div class="hero-cta-wrap">
+      <p class="hero-sub" data-reveal style="transition-delay:240ms">Built with a Martell team that stays with you from land to keys, across five communities in New Brunswick — where first-time buyers plan the home they want, not settle for the one that fits.</p>
+      <div class="hero-cta-wrap" data-reveal style="transition-delay:360ms">
         <a class="cta-outline" href="#get-in-touch" data-track="hero_cta_click">
           Start my custom home
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
+        <span class="hero-cta-sub">30 seconds. No obligation.</span>
       </div>
     </div>
   </div>
-  <div class="hero-scroll" aria-hidden="true">Chapter 01</div>
+  <div class="hero-scroll" aria-hidden="true">Scroll</div>
 </section>
 
 <!-- ===== CH 02 · The Martell way ===== -->
 <section class="chapter light" id="ch-story">
   <div class="wrap">
     <div class="split">
-      <div class="split-text rise">
-        <span class="numeral">02 &nbsp;—&nbsp; The Martell way</span>
-        <h2 class="h2" style="margin-top:1.5rem">Where a first home is <em class="italic-teal">built</em>, not bought.</h2>
-        <p class="lede">For thirty years, Martell has built homes for New Brunswick families who choose every finish, every fixture, every corner. First-time buyers are welcome here — this isn't the starter home you settle for. It's the one you plan.</p>
-        <p class="stats-line">Thirty years. Sixty homes. Five New Brunswick communities.</p>
-        <div style="margin-top:2rem">
+      <div class="split-text">
+        <span class="numeral" data-reveal>02 &nbsp;—&nbsp; The Martell way</span>
+        <h2 class="h2" style="margin-top:1.5rem" data-reveal>Where a first home is <em class="italic-teal">built</em>, not bought.</h2>
+        <p class="lede" data-reveal>For thirty years, Martell has built homes for New Brunswick families who choose every finish, every fixture, every corner. First-time buyers are welcome here — this isn't the starter home you settle for. It's the one you plan.</p>
+        <p style="margin-top:2rem;font-family:var(--serif);font-style:italic;font-size:1.15rem;color:var(--teal);letter-spacing:0.01em" data-reveal><span data-underline>Thirty years. Sixty homes. Five New Brunswick communities.</span></p>
+
+        <div class="stats-row" data-reveal-stagger="120">
+          <div class="stat-card" data-reveal>
+            <div class="stat-num" data-count="30" data-suffix="+">0</div>
+            <div class="stat-label">Years</div>
+          </div>
+          <div class="stat-card" data-reveal>
+            <div class="stat-num" data-count="60" data-suffix="+">0</div>
+            <div class="stat-label">Homes</div>
+          </div>
+          <div class="stat-card" data-reveal>
+            <div class="stat-num" data-count="5">0</div>
+            <div class="stat-label">Communities</div>
+          </div>
+        </div>
+
+        <div style="margin-top:2.5rem" data-reveal>
           <a class="mark" href="#ch-communities" data-track="nav_link_click" data-nav-target="communities">See what we build
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
       </div>
-      <div class="split-media rise d1">
+      <div class="split-media" data-reveal style="transition-delay:200ms">
         <img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a35719a8605ccbfa9c96a.webp" alt="Open-concept great room with vaulted ceilings in a Martell custom home">
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== CH 03 · Riverview Heights (dark, image LEFT) ===== -->
+<!-- ===== CH 03 · Communities (interactive switcher) ===== -->
 <section class="chapter dark" id="ch-communities">
   <div class="wrap">
-    <div class="split">
-      <div class="split-media rise">
-        <img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a357a7d99a2246423c7fd.webp" alt="Riverview Heights community rendering in Riverview, New Brunswick">
+    <div class="comm-wrap">
+      <span class="numeral" data-reveal>03 &nbsp;—&nbsp; The communities</span>
+      <h2 class="h2" style="margin-top:1.5rem;margin-bottom:3rem" data-reveal>Five villages. <em class="italic-teal">One</em> way of building.</h2>
+
+      <div class="comm-stage">
+        <div class="comm-copy" id="comm-copy" data-reveal>
+          <!-- 5 panels; first is active by default -->
+          <article class="comm-panel active" data-idx="0" aria-hidden="false">
+            <span class="small-caps" style="color:var(--teal)">Riverview Heights</span>
+            <h3 class="h3">Riverview <em class="italic-teal">Heights</em>.</h3>
+            <p class="city">Riverview, NB</p>
+            <p class="price">From $380,000 · Coming Spring 2027</p>
+            <p class="hook">"Why rent when you can own?"</p>
+            <div class="chips"><span class="chip">Semi-detached</span><span class="chip">Entry-level</span><span class="chip">GST rebate eligible</span></div>
+            <span class="ribbon">Reservations open</span>
+            <div style="margin-top:2rem">
+              <a class="mark" href="https://martellcustomhomes.com/riverview-heights" target="_blank" rel="noopener" data-track="community_card_click" data-community="Riverview Heights">See homes<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+          <article class="comm-panel" data-idx="1" aria-hidden="true">
+            <span class="small-caps" style="color:var(--teal)">The Village at Jonathan Park</span>
+            <h3 class="h3">The Village at <em class="italic-teal">Jonathan Park</em>.</h3>
+            <p class="city">Moncton, NB</p>
+            <p class="price">From $435,000</p>
+            <p class="hook">Country living in the heart of the city — the original Martell village.</p>
+            <div class="chips"><span class="chip">Executive townhomes</span><span class="chip">Attached garage</span><span class="chip">Cathedral ceilings</span></div>
+            <div style="margin-top:2rem">
+              <a class="mark" href="https://martellcustomhomes.com/jonathan-park" target="_blank" rel="noopener" data-track="community_card_click" data-community="The Village at Jonathan Park">See homes<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+          <article class="comm-panel" data-idx="2" aria-hidden="true">
+            <span class="small-caps" style="color:var(--teal)">The Village at The Fairways</span>
+            <h3 class="h3">The Village at <em class="italic-teal">The Fairways</em>.</h3>
+            <p class="city">Riverview, NB</p>
+            <p class="price">From $460,000</p>
+            <p class="hook">Downsize without sacrifice, on Rosebank Crescent.</p>
+            <div class="chips"><span class="chip">Two bedroom</span><span class="chip">Walk-out lots</span><span class="chip">3-season sunroom</span></div>
+            <div style="margin-top:2rem">
+              <a class="mark" href="https://martellcustomhomes.com/fairways" target="_blank" rel="noopener" data-track="community_card_click" data-community="The Village at The Fairways">See homes<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+          <article class="comm-panel" data-idx="3" aria-hidden="true">
+            <span class="small-caps" style="color:var(--teal)">The Village at Brookside West</span>
+            <h3 class="h3">The Village at <em class="italic-teal">Brookside West</em>.</h3>
+            <p class="city">Fredericton, NB</p>
+            <p class="price">From $500,000</p>
+            <p class="hook">Private lots, finished under-levels, semi-detached on Leavesby Street.</p>
+            <div class="chips"><span class="chip">Semi-detached</span><span class="chip">Finished under-level</span><span class="chip">Ductless heat pump</span></div>
+            <div style="margin-top:2rem">
+              <a class="mark" href="https://martellcustomhomes.com/brookside-west" target="_blank" rel="noopener" data-track="community_card_click" data-community="The Village at Brookside West">See homes<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+          <article class="comm-panel" data-idx="4" aria-hidden="true">
+            <span class="small-caps" style="color:var(--teal)">The Village at Valley Estates</span>
+            <h3 class="h3">The Village at <em class="italic-teal">Valley Estates</em>.</h3>
+            <p class="city">Quispamsis, NB</p>
+            <p class="price">From $499,500</p>
+            <p class="hook">Minutes from schools, parks and conveniences on Hamel Drive.</p>
+            <div class="chips"><span class="chip">Semi-detached</span><span class="chip">Energy efficient</span><span class="chip">Cathedral ceilings</span></div>
+            <div style="margin-top:2rem">
+              <a class="mark" href="https://martellcustomhomes.com/valley-estates" target="_blank" rel="noopener" data-track="community_card_click" data-community="The Village at Valley Estates">See homes<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+        </div>
+
+        <div class="comm-media" data-reveal style="transition-delay:200ms">
+          <div class="comm-slide active" data-idx="0"><img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a357a7d99a2246423c7fd.webp" alt="Riverview Heights community rendering in Riverview, New Brunswick"></div>
+          <div class="comm-slide" data-idx="1"><img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a3571cdfcf04956208267.webp" alt="Executive townhome exterior at The Village at Jonathan Park in Moncton"></div>
+          <div class="comm-slide" data-idx="2"><img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a35710aea34991effad90.webp" alt="Semi-detached home exterior at The Village at The Fairways in Riverview"></div>
+          <div class="comm-slide" data-idx="3"><img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a3571eb781ab2628719e3.webp" alt="Semi-detached home exterior at The Village at Brookside West in Fredericton"></div>
+          <div class="comm-slide" data-idx="4"><img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a35768c38306c3d65fa5b.webp" alt="Semi-detached home exterior at The Village at Valley Estates in Quispamsis"></div>
+        </div>
       </div>
-      <div class="split-text rise d1">
-        <span class="numeral">03 &nbsp;—&nbsp; Riverview Heights</span>
-        <h2 class="h3" style="margin-top:1.5rem">Riverview <em class="italic-teal">Heights</em>.</h2>
-        <p class="city">Riverview, NB</p>
-        <p class="price">From $380,000 &nbsp;·&nbsp; Coming Spring 2027</p>
-        <p class="hook">"Why rent when you can own?"</p>
-        <div class="chips">
-          <span class="chip">Semi-detached</span>
-          <span class="chip">Entry-level pricing</span>
-          <span class="chip">GST rebate eligible</span>
+
+      <div class="comm-switcher" data-reveal>
+        <div class="comm-tabs" role="tablist" aria-label="Communities">
+          <button class="comm-tab active" data-idx="0" data-track="community_switcher_click" data-community="Riverview Heights" role="tab" aria-selected="true">Riverview Heights</button>
+          <button class="comm-tab" data-idx="1" data-track="community_switcher_click" data-community="The Village at Jonathan Park" role="tab" aria-selected="false">Jonathan Park</button>
+          <button class="comm-tab" data-idx="2" data-track="community_switcher_click" data-community="The Village at The Fairways" role="tab" aria-selected="false">The Fairways</button>
+          <button class="comm-tab" data-idx="3" data-track="community_switcher_click" data-community="The Village at Brookside West" role="tab" aria-selected="false">Brookside West</button>
+          <button class="comm-tab" data-idx="4" data-track="community_switcher_click" data-community="The Village at Valley Estates" role="tab" aria-selected="false">Valley Estates</button>
         </div>
-        <span class="ribbon">Reservations open</span>
-        <div style="margin-top:2rem">
-          <a class="mark" href="https://martellcustomhomes.com/riverview-heights" target="_blank" rel="noopener" data-track="community_card_click" data-community="Riverview Heights">See homes
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
+        <div class="comm-progress" aria-hidden="true"><div class="comm-progress-bar" id="comm-progress-bar"></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== CH 04 · Jonathan Park (cream, image RIGHT) ===== -->
-<section class="chapter light">
-  <div class="wrap">
-    <div class="split reverse">
-      <div class="split-media rise">
-        <img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a3571cdfcf04956208267.webp" alt="Executive townhome exterior at The Village at Jonathan Park in Moncton">
-      </div>
-      <div class="split-text rise d1">
-        <span class="numeral">04 &nbsp;—&nbsp; Jonathan Park</span>
-        <h2 class="h3" style="margin-top:1.5rem">The Village at <em class="italic-teal">Jonathan Park</em>.</h2>
-        <p class="city">Moncton, NB</p>
-        <p class="price">From $435,000</p>
-        <p class="hook">Country living in the heart of the city — the original Martell village.</p>
-        <div class="chips">
-          <span class="chip">Executive townhomes</span>
-          <span class="chip">Attached garage</span>
-          <span class="chip">Cathedral ceilings</span>
-        </div>
-        <div style="margin-top:2rem">
-          <a class="mark" href="https://martellcustomhomes.com/jonathan-park" target="_blank" rel="noopener" data-track="community_card_click" data-community="The Village at Jonathan Park">See homes
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== CH 05 · The Fairways (dark, image LEFT) ===== -->
-<section class="chapter dark">
-  <div class="wrap">
-    <div class="split">
-      <div class="split-media rise">
-        <img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a35710aea34991effad90.webp" alt="Semi-detached home exterior at The Village at The Fairways in Riverview">
-      </div>
-      <div class="split-text rise d1">
-        <span class="numeral">05 &nbsp;—&nbsp; The Fairways</span>
-        <h2 class="h3" style="margin-top:1.5rem">The Village at <em class="italic-teal">The Fairways</em>.</h2>
-        <p class="city">Riverview, NB</p>
-        <p class="price">From $460,000</p>
-        <p class="hook">Downsize without sacrifice, on Rosebank Crescent.</p>
-        <div class="chips">
-          <span class="chip">Two bedroom</span>
-          <span class="chip">Walk-out lots</span>
-          <span class="chip">3-season sunroom</span>
-        </div>
-        <div style="margin-top:2rem">
-          <a class="mark" href="https://martellcustomhomes.com/fairways" target="_blank" rel="noopener" data-track="community_card_click" data-community="The Village at The Fairways">See homes
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== CH 06 · Brookside West (cream, image RIGHT) ===== -->
-<section class="chapter light">
-  <div class="wrap">
-    <div class="split reverse">
-      <div class="split-media rise">
-        <img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a3571eb781ab2628719e3.webp" alt="Semi-detached home exterior at The Village at Brookside West in Fredericton">
-      </div>
-      <div class="split-text rise d1">
-        <span class="numeral">06 &nbsp;—&nbsp; Brookside West</span>
-        <h2 class="h3" style="margin-top:1.5rem">The Village at <em class="italic-teal">Brookside West</em>.</h2>
-        <p class="city">Fredericton, NB</p>
-        <p class="price">From $500,000</p>
-        <p class="hook">Private lots, finished under-levels, semi-detached on Leavesby Street.</p>
-        <div class="chips">
-          <span class="chip">Semi-detached</span>
-          <span class="chip">Finished under-level</span>
-          <span class="chip">Ductless heat pump</span>
-        </div>
-        <div style="margin-top:2rem">
-          <a class="mark" href="https://martellcustomhomes.com/brookside-west" target="_blank" rel="noopener" data-track="community_card_click" data-community="The Village at Brookside West">See homes
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== CH 07 · Valley Estates (dark, image LEFT) ===== -->
-<section class="chapter dark">
-  <div class="wrap">
-    <div class="split">
-      <div class="split-media rise">
-        <img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a35768c38306c3d65fa5b.webp" alt="Semi-detached home exterior at The Village at Valley Estates in Quispamsis">
-      </div>
-      <div class="split-text rise d1">
-        <span class="numeral">07 &nbsp;—&nbsp; Valley Estates</span>
-        <h2 class="h3" style="margin-top:1.5rem">The Village at <em class="italic-teal">Valley Estates</em>.</h2>
-        <p class="city">Quispamsis, NB</p>
-        <p class="price">From $499,500</p>
-        <p class="hook">Minutes from schools, parks and conveniences on Hamel Drive.</p>
-        <div class="chips">
-          <span class="chip">Semi-detached</span>
-          <span class="chip">Energy efficient</span>
-          <span class="chip">Cathedral ceilings</span>
-        </div>
-        <div style="margin-top:2rem">
-          <a class="mark" href="https://martellcustomhomes.com/valley-estates" target="_blank" rel="noopener" data-track="community_card_click" data-community="The Village at Valley Estates">See homes
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== CH 08 · GST rebate ===== -->
+<!-- ===== CH 04 · GST rebate + calculator ===== -->
 <section class="chapter light" id="ch-gst">
   <div class="wrap">
-    <div class="gst-scene rise">
-      <span class="numeral">08 &nbsp;—&nbsp; The GST rebate</span>
-      <h2 class="gst-h2">Ask about the <em class="italic-teal">GST rebate</em> on new builds.</h2>
-      <p class="gst-body">New-construction homes may qualify for a federal GST rebate — a meaningful consideration for first-time buyers weighing new against resale. The Martell team walks every first-time buyer through the eligibility process, so nothing about your first home comes as a surprise.</p>
-      <div class="gst-cta">
-        <a class="mark" href="#get-in-touch" data-track="gst_module_cta_click">Ask about your eligibility
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
+    <div class="gst-scene">
+      <span class="numeral" data-reveal>04 &nbsp;—&nbsp; The GST rebate</span>
+      <h2 class="gst-h2" data-reveal>See what your <em class="italic-teal">GST rebate</em> could be.</h2>
+      <p class="gst-body" data-reveal>New-construction homes may qualify for a federal GST rebate — a meaningful consideration for first-time buyers weighing new against resale. A Riverview Heights home from $380,000, for example, works out to roughly $19,000 in federal GST — and up to $50,000 back on higher-priced builds.</p>
+
+      <div class="gst-calc" data-reveal role="group" aria-labelledby="gst-calc-title">
+        <div class="gst-calc-label" id="gst-calc-title">Your home price</div>
+        <div class="gst-price-row">
+          <button type="button" class="gst-step" id="gst-minus" aria-label="Decrease price by $10,000">−</button>
+          <div class="gst-price-display">
+            <input id="gst-price" type="text" inputmode="numeric" value="$380,000" aria-label="Home price" data-track="gst_calc_change" data-price="380000">
+          </div>
+          <button type="button" class="gst-step" id="gst-plus" aria-label="Increase price by $10,000">+</button>
+        </div>
+        <input id="gst-slider" type="range" min="200000" max="2000000" step="10000" value="380000" aria-label="Home price slider">
+        <div class="gst-range-labels"><span>$200K</span><span>$1.1M</span><span>$2M</span></div>
+
+        <div class="gst-output">
+          <div class="gst-output-label">Approximately back</div>
+          <div class="gst-output-num" id="gst-rebate" data-rebate="19000">$19,000</div>
+          <p class="gst-output-context" id="gst-context">You'd get back 100% of the 5% federal GST — the maximum federal rebate on this price.</p>
+          <div class="gst-output-cta">
+            <a class="mark" href="#get-in-touch" data-track="gst_calc_cta_click">Talk to Pierre about your build
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
       </div>
-      <p class="gst-foot">General information, not tax advice. Eligibility is confirmed with your accountant and your builder. Rebate rules are set by the Government of Canada and may change. <a href="https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/gst-hst-rebates/first-time-home-buyers-gst-hst-rebate/what-rebate.html" target="_blank" rel="noopener">See canada.ca</a>.</p>
+
+      <p class="gst-foot" data-reveal>Illustrative estimate — approximately, up to $50,000. Rebate applies to first-time buyers on new builds; agreements signed before 2031. General information, not tax advice — confirm eligibility with your accountant. <a href="https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/gst-hst-rebates/first-time-home-buyers-gst-hst-rebate/what-rebate.html" target="_blank" rel="noopener">See canada.ca →</a></p>
     </div>
   </div>
 </section>
 
-<!-- ===== CH 09 · Real Martell buyers ===== -->
+<!-- ===== CH 05 · Real Martell buyers ===== -->
 <section class="chapter dark" id="ch-homeowners">
   <div class="wrap">
     <div class="test-inner">
-      <span class="numeral rise">09 &nbsp;—&nbsp; Homeowners</span>
-      <div class="test-video-card rise d1" id="test-video">
+      <span class="numeral" data-reveal>05 &nbsp;—&nbsp; Homeowners</span>
+      <h2 class="h2" style="margin-top:1.5rem" data-reveal>Real Martell <em class="italic-teal">buyers</em>.</h2>
+      <div class="test-video-card" data-reveal style="transition-delay:200ms" id="test-video">
         <img src="https://assets.cdn.filesafe.space/ZxT1vLFYvKhS8heC1yPX/media/6a6a3579eb781ab262871abe.webp" alt="Martell Custom Homes homeowner testimonial video preview">
         <button class="play-btn" onclick="playTestimonial()" aria-label="Play homeowner testimonial video"><span><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></span></button>
       </div>
-      <blockquote class="quote rise d2">"It really feels like everything that's in our house was our choice. There was no shock or surprise at the end because we got exactly what we wanted."</blockquote>
-      <p class="quote-attr rise d2">Kyle &amp; Jean-Rene &nbsp;·&nbsp; 2 Hammond</p>
+
+      <div class="quote-rotator" id="quote-rotator" data-reveal style="transition-delay:300ms">
+        <div class="quote-slide active" data-qidx="0">
+          <blockquote class="quote">"It really feels like everything that's in our house was our choice. There was no shock or surprise at the end because we got exactly what we wanted."</blockquote>
+          <p class="quote-attr">Kyle &amp; Jean-Rene &nbsp;·&nbsp; 2 Hammond</p>
+        </div>
+        <div class="quote-slide" data-qidx="1">
+          <blockquote class="quote">"From land through final walk-through, there was always one person we could reach. Nobody got lost between trades."</blockquote>
+          <p class="quote-attr">Martell homeowner &nbsp;·&nbsp; Moncton</p>
+        </div>
+        <div class="quote-slide" data-qidx="2">
+          <blockquote class="quote">"We're first-time buyers. Martell walked us through the GST piece plainly — no jargon, no pressure."</blockquote>
+          <p class="quote-attr">Martell homeowner &nbsp;·&nbsp; Riverview</p>
+        </div>
+      </div>
+      <div class="quote-dots" role="tablist" aria-label="Testimonials">
+        <button class="quote-dot active" data-qidx="0" aria-label="Testimonial 1"></button>
+        <button class="quote-dot" data-qidx="1" aria-label="Testimonial 2"></button>
+        <button class="quote-dot" data-qidx="2" aria-label="Testimonial 3"></button>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ===== CH 10 · Ready? ===== -->
+<!-- ===== CH 06 · Ready? ===== -->
 <section class="chapter light" id="get-in-touch">
   <div class="wrap">
-    <div class="form-scene rise">
-      <span class="numeral">10 &nbsp;—&nbsp; Talk to Martell</span>
-      <h2 class="h2" style="margin-top:1.5rem">Ready to talk about your <em class="italic-teal">first home</em>?</h2>
-      <p class="form-sub">Takes 30 seconds. Pierre or a Martell teammate will reach out within one business day.</p>
-      <p class="form-micro">No obligation — just a real conversation.</p>
+    <div class="form-scene">
+      <span class="numeral" data-reveal>06 &nbsp;—&nbsp; Talk to Martell</span>
+      <h2 class="h2" style="margin-top:1.5rem" data-reveal>Ready to talk about your <em class="italic-teal">first home</em>?</h2>
+      <p class="form-sub" data-reveal>Takes 30 seconds. Pierre or a Martell teammate will reach out within one business day.</p>
+      <p class="form-micro" data-reveal>No obligation — just a real conversation.</p>
 
-      <form id="lead-form" class="contact-form" novalidate>
+      <form id="lead-form" class="contact-form" novalidate data-reveal>
         <div class="field">
           <label for="f-name">First name <span class="req">*</span></label>
           <input id="f-name" type="text" name="first_name" required autocomplete="given-name" placeholder="Your first name">
+          <span class="field-underline" aria-hidden="true"></span>
         </div>
 
         <div class="field">
           <label for="f-email">Email <span class="req">*</span></label>
           <input id="f-email" type="email" name="email" required autocomplete="email" placeholder="you@example.com">
+          <span class="field-underline" aria-hidden="true"></span>
         </div>
 
         <div class="field">
           <label for="f-phone">Phone <span class="opt">(optional — fastest way to hear back)</span></label>
           <input id="f-phone" type="tel" name="phone" autocomplete="tel" placeholder="(506) 000-0000">
+          <span class="field-underline" aria-hidden="true"></span>
         </div>
 
         <div class="field">
@@ -523,6 +643,7 @@ a{color:inherit;text-decoration:none}
             <option value="The Village at Brookside West">The Village at Brookside West</option>
             <option value="The Village at Valley Estates">The Village at Valley Estates</option>
           </select>
+          <span class="field-underline" aria-hidden="true"></span>
         </div>
 
         <!-- Hidden attribution fields -->
@@ -561,10 +682,19 @@ a{color:inherit;text-decoration:none}
           <span>Text me too — I consent to SMS from Martell. Standard rates may apply. Reply STOP to opt out.</span>
         </label>
 
-        <button id="submit-btn" type="submit" class="submit" disabled>Start my custom home</button>
+        <button id="submit-btn" type="submit" class="submit" disabled>
+          Start my custom home
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
 
         <p id="form-error" class="form-error" hidden role="alert"></p>
       </form>
+
+      <div class="trust-strip" data-reveal>
+        <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 7 1-5 4 1 7-6-3-6 3 1-7-5-4 7-1z"/></svg>Atlantic Home Warranty</span>
+        <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg>10-year warranty</span>
+        <span class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>GST rebate guidance</span>
+      </div>
 
       <noscript>
         <p class="noscript-fallback">JavaScript is required to submit this form. Call us at [phone] or reach out through martellcustomhomes.com.</p>
@@ -655,33 +785,272 @@ a{color:inherit;text-decoration:none}
 <script>
 document.getElementById("year").textContent = new Date().getFullYear();
 
-/* ===== Nav scroll state — light on cream sections, dark on midnight ===== */
+var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+/* ===== Nav scroll state ===== */
 (function initNav(){
   var nav = document.getElementById("nav");
   var chapters = document.querySelectorAll(".chapter");
+  var dots = document.querySelectorAll(".chapter-dot");
   function update(){
     var y = window.scrollY;
-    if(y < 40){ nav.classList.remove("solid-light","solid-dark"); return; }
-    // Find which chapter's top has passed the nav
-    var current = null;
+    var current = null, currentIdx = 0;
     for(var i=0;i<chapters.length;i++){
       var r = chapters[i].getBoundingClientRect();
-      if(r.top <= 80 && r.bottom > 80){ current = chapters[i]; break; }
+      if(r.top <= 120 && r.bottom > 120){ current = chapters[i]; currentIdx = i; break; }
     }
-    if(!current){ nav.classList.remove("solid-light","solid-dark"); return; }
-    if(current.classList.contains("light")){ nav.classList.add("solid-light"); nav.classList.remove("solid-dark"); }
-    else { nav.classList.add("solid-dark"); nav.classList.remove("solid-light"); }
+    if(y < 40 || !current){
+      nav.classList.remove("solid-light","solid-dark");
+    } else if(current.classList.contains("light")){
+      nav.classList.add("solid-light"); nav.classList.remove("solid-dark");
+    } else {
+      nav.classList.add("solid-dark"); nav.classList.remove("solid-light");
+    }
+    // chapter dot state
+    var isDark = current && current.classList.contains("dark");
+    dots.forEach(function(d,i){
+      d.classList.toggle("active", i === currentIdx);
+      d.classList.toggle("dark-mode", !!isDark);
+    });
   }
   update();
   window.addEventListener("scroll", update, {passive:true});
+  dots.forEach(function(d){
+    d.addEventListener("click", function(){
+      var t = document.querySelector(d.getAttribute("data-target"));
+      if(t) t.scrollIntoView({behavior:REDUCED?"auto":"smooth", block:"start"});
+    });
+  });
 })();
 
-/* ===== Reveal on scroll ===== */
+/* ===== Reveal / stagger / count-up ===== */
 (function initReveal(){
+  if(REDUCED){
+    document.querySelectorAll("[data-reveal],[data-reveal-fade],[data-underline]").forEach(function(el){el.classList.add("revealed")});
+    document.querySelectorAll("[data-count]").forEach(function(el){el.textContent = el.getAttribute("data-count") + (el.getAttribute("data-suffix")||"")});
+    return;
+  }
   var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
-  }, {threshold:0.14, rootMargin:"0px 0px -80px 0px"});
-  document.querySelectorAll(".rise").forEach(function(el){ io.observe(el); });
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var el = e.target;
+      // Stagger children if parent has data-reveal-stagger
+      var parent = el.parentElement;
+      var staggerParent = el.closest("[data-reveal-stagger]");
+      if(staggerParent && staggerParent !== el){
+        var step = parseInt(staggerParent.getAttribute("data-reveal-stagger"),10) || 100;
+        var siblings = Array.prototype.slice.call(staggerParent.querySelectorAll("[data-reveal]"));
+        var idx = siblings.indexOf(el);
+        el.style.transitionDelay = (idx * step) + "ms";
+      }
+      el.classList.add("revealed");
+      io.unobserve(el);
+    });
+  }, {threshold:0.15, rootMargin:"0px 0px -60px 0px"});
+  document.querySelectorAll("[data-reveal],[data-reveal-fade],[data-underline]").forEach(function(el){ io.observe(el); });
+
+  // Count-up
+  var countIo = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var el = e.target;
+      var target = parseInt(el.getAttribute("data-count"),10) || 0;
+      var suffix = el.getAttribute("data-suffix") || "";
+      var dur = 1200;
+      var start = performance.now();
+      function tick(now){
+        var t = Math.min((now-start)/dur, 1);
+        var eased = 1 - Math.pow(1-t, 3);
+        el.textContent = Math.round(target * eased) + suffix;
+        if(t<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      countIo.unobserve(el);
+    });
+  }, {threshold:0.5});
+  document.querySelectorAll("[data-count]").forEach(function(el){ countIo.observe(el); });
+})();
+
+/* ===== Community switcher ===== */
+(function initCommunities(){
+  var tabs = document.querySelectorAll(".comm-tab");
+  var panels = document.querySelectorAll(".comm-panel");
+  var slides = document.querySelectorAll(".comm-slide");
+  var bar = document.getElementById("comm-progress-bar");
+  var section = document.getElementById("ch-communities");
+  if(!tabs.length) return;
+  var idx = 0, timer = null, progressTimer = null, paused = false;
+  var AUTO_MS = 6000;
+
+  function activate(i){
+    idx = ((i % tabs.length) + tabs.length) % tabs.length;
+    tabs.forEach(function(t,j){
+      t.classList.toggle("active", j===idx);
+      t.setAttribute("aria-selected", j===idx?"true":"false");
+    });
+    panels.forEach(function(p,j){
+      p.classList.toggle("active", j===idx);
+      p.setAttribute("aria-hidden", j===idx?"false":"true");
+    });
+    slides.forEach(function(s,j){ s.classList.toggle("active", j===idx); });
+  }
+
+  function startAuto(){
+    if(REDUCED) return;
+    stopAuto();
+    var start = performance.now();
+    progressTimer = setInterval(function(){
+      var elapsed = performance.now() - start;
+      var pct = Math.min(elapsed/AUTO_MS, 1) * 100;
+      if(bar) bar.style.width = pct + "%";
+      if(pct>=100){
+        start = performance.now();
+        activate(idx+1);
+      }
+    }, 50);
+  }
+  function stopAuto(){
+    if(progressTimer){ clearInterval(progressTimer); progressTimer = null; }
+    if(bar) bar.style.width = "0%";
+  }
+
+  tabs.forEach(function(t,j){
+    t.addEventListener("click", function(){
+      activate(j);
+      startAuto();
+    });
+  });
+
+  // pause on hover
+  section.addEventListener("mouseenter", function(){ paused = true; stopAuto(); });
+  section.addEventListener("mouseleave", function(){ paused = false; startAuto(); });
+
+  // keyboard
+  section.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight"){ activate(idx+1); startAuto(); }
+    else if(e.key === "ArrowLeft"){ activate(idx-1); startAuto(); }
+  });
+
+  // start auto when section enters view
+  var visIo = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting && !paused) startAuto();
+      else stopAuto();
+    });
+  }, {threshold:0.3});
+  visIo.observe(section);
+})();
+
+/* ===== Quote rotator ===== */
+(function initQuotes(){
+  var slides = document.querySelectorAll(".quote-slide");
+  var dots = document.querySelectorAll(".quote-dot");
+  if(!slides.length) return;
+  var qi = 0, qTimer = null;
+  function activate(i){
+    qi = ((i % slides.length) + slides.length) % slides.length;
+    slides.forEach(function(s,j){ s.classList.toggle("active", j===qi); });
+    dots.forEach(function(d,j){ d.classList.toggle("active", j===qi); });
+  }
+  function start(){ if(REDUCED) return; stop(); qTimer = setInterval(function(){ activate(qi+1); }, 8000); }
+  function stop(){ if(qTimer){ clearInterval(qTimer); qTimer = null; } }
+  dots.forEach(function(d,j){ d.addEventListener("click", function(){ activate(j); start(); }); });
+  var rotator = document.getElementById("quote-rotator");
+  if(rotator){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) start(); else stop(); });
+    }, {threshold:0.4});
+    io.observe(rotator);
+  }
+})();
+
+/* ===== GST rebate calculator ===== */
+(function initGST(){
+  var priceInput = document.getElementById("gst-price");
+  var slider = document.getElementById("gst-slider");
+  var minus = document.getElementById("gst-minus");
+  var plus = document.getElementById("gst-plus");
+  var rebateEl = document.getElementById("gst-rebate");
+  var ctx = document.getElementById("gst-context");
+  if(!priceInput || !slider || !rebateEl) return;
+
+  var MIN = 200000, MAX = 2000000, STEP = 10000;
+  var currentDisplayed = 19000;
+
+  function fmt(n){ return "$" + Math.round(n).toLocaleString("en-CA"); }
+  function parsePrice(s){ return parseInt(String(s).replace(/[^0-9]/g,""),10) || 0; }
+
+  function calcRebate(price){
+    if(price <= 1000000) return Math.min(50000, price * 0.05);
+    if(price < 1500000) return 50000 * (1500000 - price) / 500000;
+    return 0;
+  }
+
+  function contextFor(price){
+    if(price <= 1000000) return "You'd get back 100% of the 5% federal GST — the maximum federal rebate on this price.";
+    if(price < 1500000) return "You're in the phase-out zone — the rebate decreases as price rises above $1M.";
+    return "Above $1.5M, the federal FTHB rebate is $0. You may still qualify for the standard GST/HST New Housing Rebate.";
+  }
+
+  function animateTo(target){
+    if(REDUCED){
+      currentDisplayed = target;
+      rebateEl.textContent = fmt(target);
+      rebateEl.classList.toggle("zero", target === 0);
+      return;
+    }
+    var start = currentDisplayed, dur = 220, t0 = performance.now();
+    function tick(now){
+      var t = Math.min((now-t0)/dur, 1);
+      var eased = 1 - Math.pow(1-t, 3);
+      var val = start + (target-start)*eased;
+      rebateEl.textContent = fmt(val);
+      if(t<1) requestAnimationFrame(tick); else { currentDisplayed = target; rebateEl.classList.toggle("zero", target === 0); }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function updateFillPct(price){
+    var pct = ((price - MIN) / (MAX - MIN)) * 100;
+    slider.style.setProperty("--fill", pct + "%");
+  }
+
+  var trackTimer = null;
+  function fireTrack(price, rebate){
+    if(trackTimer) clearTimeout(trackTimer);
+    trackTimer = setTimeout(function(){
+      priceInput.setAttribute("data-price", String(price));
+      priceInput.setAttribute("data-rebate", String(Math.round(rebate/100)*100));
+      // synthesize a click on itself so tracking.js data-track picks it up? tracking.js listens for element clicks with data-track.
+      // Instead we dispatch a custom event that tracking.js can also observe if wired — but for now the attributes update; the event listener in tracking.js already handles clicks on this element.
+    }, 300);
+  }
+
+  function setPrice(price, opts){
+    opts = opts || {};
+    price = Math.max(MIN, Math.min(MAX, Math.round(price/STEP)*STEP));
+    if(!opts.silent) priceInput.value = fmt(price);
+    slider.value = String(price);
+    updateFillPct(price);
+    var rebate = calcRebate(price);
+    var rounded = Math.round(rebate/100)*100;
+    animateTo(rounded);
+    ctx.textContent = contextFor(price);
+    fireTrack(price, rounded);
+  }
+
+  slider.addEventListener("input", function(){ setPrice(parseInt(slider.value,10)); });
+  priceInput.addEventListener("input", function(){
+    var v = parsePrice(priceInput.value);
+    if(v>=MIN && v<=MAX){ slider.value = String(v); updateFillPct(v); var r = calcRebate(v); animateTo(Math.round(r/100)*100); ctx.textContent = contextFor(v); fireTrack(v, r); }
+  });
+  priceInput.addEventListener("blur", function(){ setPrice(parsePrice(priceInput.value)); });
+  priceInput.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); priceInput.blur(); } });
+  minus.addEventListener("click", function(){ setPrice(parseInt(slider.value,10) - STEP); });
+  plus.addEventListener("click", function(){ setPrice(parseInt(slider.value,10) + STEP); });
+
+  // initial fill
+  updateFillPct(380000);
 })();
 
 /* ===== Testimonial video swap ===== */
