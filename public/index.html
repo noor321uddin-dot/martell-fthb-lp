@@ -608,66 +608,96 @@ body.qmodal-locked{overflow:hidden}
     <span class="qmodal-eyebrow">— GST qualifier</span>
     <h3 class="qmodal-title" id="qmodal-title">See if you qualify — 30 seconds.</h3>
 
-    <div class="qmodal-progress" id="qmodal-progress" aria-hidden="true">
-      <span class="qmodal-dot active"></span>
-      <span class="qmodal-dot"></span>
-      <span class="qmodal-dot"></span>
-      <span class="qmodal-dot"></span>
-      <span class="qmodal-dot"></span>
-    </div>
+    <div class="qmodal-progress" id="qmodal-progress" aria-hidden="true"></div>
 
     <div class="qmodal-steps" id="qmodal-steps">
-      <!-- Step 1 -->
+      <!-- Step 1 · age -->
       <div class="qmodal-step active" data-step="1">
-        <p class="qmodal-q">Will this be your <strong>primary home</strong>?</p>
+        <p class="qmodal-q">How <strong>old</strong> are you?</p>
         <div class="qmodal-choices">
-          <button type="button" class="qmodal-choice" data-q="q1" data-a="yes">Yes</button>
-          <button type="button" class="qmodal-choice" data-q="q1" data-a="no">No</button>
+          <button type="button" class="qmodal-choice" data-q="q1" data-a="under18">Under 18</button>
+          <button type="button" class="qmodal-choice" data-q="q1" data-a="18plus">18+</button>
         </div>
         <div class="qmodal-nav">
           <span></span>
-          <span>1 of 4</span>
+          <span class="qmodal-count" data-count-of="1"></span>
         </div>
       </div>
-      <!-- Step 2 -->
+      <!-- Step 2 · citizen/PR -->
       <div class="qmodal-step" data-step="2">
-        <p class="qmodal-q">Are you <strong>18+ and a Canadian citizen or permanent resident</strong>?</p>
+        <p class="qmodal-q">Are you a <strong>Canadian citizen or permanent resident</strong>?</p>
         <div class="qmodal-choices">
           <button type="button" class="qmodal-choice" data-q="q2" data-a="yes">Yes</button>
           <button type="button" class="qmodal-choice" data-q="q2" data-a="no">No</button>
         </div>
         <div class="qmodal-nav">
           <button type="button" class="qmodal-back" data-qmodal-back>← Back</button>
-          <span>2 of 4</span>
+          <span class="qmodal-count" data-count-of="2"></span>
         </div>
       </div>
-      <!-- Step 3 -->
+      <!-- Step 3 · has partner -->
       <div class="qmodal-step" data-step="3">
-        <p class="qmodal-q">Have you (or your spouse/common-law partner) <strong>owned & lived in your own home</strong> in the current or previous 4 calendar years?</p>
+        <p class="qmodal-q">Do you have a <strong>spouse or common-law partner</strong>?</p>
         <div class="qmodal-choices">
           <button type="button" class="qmodal-choice" data-q="q3" data-a="yes">Yes</button>
           <button type="button" class="qmodal-choice" data-q="q3" data-a="no">No</button>
         </div>
         <div class="qmodal-nav">
           <button type="button" class="qmodal-back" data-qmodal-back>← Back</button>
-          <span>3 of 4</span>
+          <span class="qmodal-count" data-count-of="3"></span>
         </div>
       </div>
-      <!-- Step 4 -->
+      <!-- Step 4 · self owned in last 4 yrs -->
       <div class="qmodal-step" data-step="4">
-        <p class="qmodal-q">Have you <strong>received the first-time buyer GST rebate before</strong>?</p>
+        <p class="qmodal-q">Have <strong>you</strong> owned and lived in your own home — anywhere in the world — in the current or previous 4 calendar years?</p>
         <div class="qmodal-choices">
           <button type="button" class="qmodal-choice" data-q="q4" data-a="yes">Yes</button>
           <button type="button" class="qmodal-choice" data-q="q4" data-a="no">No</button>
         </div>
         <div class="qmodal-nav">
           <button type="button" class="qmodal-back" data-qmodal-back>← Back</button>
-          <span>4 of 4</span>
+          <span class="qmodal-count" data-count-of="4"></span>
+        </div>
+      </div>
+      <!-- Step 5 · partner owned in last 4 yrs (conditional on Q3=yes) -->
+      <div class="qmodal-step" data-step="5">
+        <p class="qmodal-q">Has your <strong>spouse or partner</strong> owned and lived in their own home in the current or previous 4 calendar years?</p>
+        <div class="qmodal-choices">
+          <button type="button" class="qmodal-choice" data-q="q5" data-a="yes">Yes</button>
+          <button type="button" class="qmodal-choice" data-q="q5" data-a="no">No</button>
+        </div>
+        <div class="qmodal-nav">
+          <button type="button" class="qmodal-back" data-qmodal-back>← Back</button>
+          <span class="qmodal-count" data-count-of="5"></span>
+        </div>
+      </div>
+      <!-- Step 6 · prior rebate -->
+      <div class="qmodal-step" data-step="6">
+        <p class="qmodal-q">Have you or your spouse/partner <strong>ever received the First-Time Home Buyer GST Rebate</strong> before?</p>
+        <div class="qmodal-choices">
+          <button type="button" class="qmodal-choice" data-q="q6" data-a="yes">Yes</button>
+          <button type="button" class="qmodal-choice" data-q="q6" data-a="no">No</button>
+        </div>
+        <div class="qmodal-nav">
+          <button type="button" class="qmodal-back" data-qmodal-back>← Back</button>
+          <span class="qmodal-count" data-count-of="6"></span>
+        </div>
+      </div>
+      <!-- Step 7 · primary residence -->
+      <div class="qmodal-step" data-step="7">
+        <p class="qmodal-q">Will this Martell home be your <strong>primary residence</strong>?</p>
+        <div class="qmodal-choices">
+          <button type="button" class="qmodal-choice" data-q="q7" data-a="yes">Yes</button>
+          <button type="button" class="qmodal-choice" data-q="q7" data-a="no">No</button>
+        </div>
+        <div class="qmodal-nav">
+          <button type="button" class="qmodal-back" data-qmodal-back>← Back</button>
+          <span class="qmodal-count" data-count-of="7"></span>
         </div>
       </div>
 
-      <!-- Step 5 · contact capture -->
-      <div class="qmodal-step" data-step="5">
+      <!-- Step 8 · contact capture -->
+      <div class="qmodal-step" data-step="8">
         <h4 class="qmodal-result-h" id="qmodal-form-h">You likely qualify.</h4>
         <p class="qmodal-form-intro" id="qmodal-form-intro">First-time buyers can get up to 5% of the price back on a new home. Share your details and a Martell advisor will confirm your exact savings + next steps.</p>
 
@@ -703,10 +733,13 @@ body.qmodal-locked{overflow:hidden}
           <!-- Hidden attribution + qualifier fields -->
           <input type="hidden" name="lead_source" value="gst_qualifier">
           <input type="hidden" name="qualified" value="">
-          <input type="hidden" name="q1_primary_home" value="">
-          <input type="hidden" name="q2_citizen_18plus" value="">
-          <input type="hidden" name="q3_owned_home_4yr" value="">
-          <input type="hidden" name="q4_prior_rebate" value="">
+          <input type="hidden" name="q1_age" value="">
+          <input type="hidden" name="q2_citizen_pr" value="">
+          <input type="hidden" name="q3_has_partner" value="">
+          <input type="hidden" name="q4_self_owned_4yr" value="">
+          <input type="hidden" name="q5_partner_owned_4yr" value="">
+          <input type="hidden" name="q6_prior_rebate" value="">
+          <input type="hidden" name="q7_primary_home" value="">
           <input type="hidden" name="page_url" value="">
           <input type="hidden" name="page_variant" value="lifestyle">
           <input type="hidden" name="gclid" value="">
@@ -740,8 +773,8 @@ body.qmodal-locked{overflow:hidden}
         </form>
       </div>
 
-      <!-- Step 6 · success -->
-      <div class="qmodal-step" data-step="6">
+      <!-- Step 9 · success -->
+      <div class="qmodal-step" data-step="9">
         <div class="qmodal-result">
           <h4 class="qmodal-result-h" id="qmodal-success-h">Looks promising.</h4>
           <p class="qmodal-result-p" id="qmodal-success-p">A Martell advisor will confirm your exact savings and next steps.</p>
@@ -1162,11 +1195,40 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
   var FALLBACK_EMAIL = "pierre@themartellexperience.com";
 
   var steps = modal.querySelectorAll(".qmodal-step");
-  var dots = modal.querySelectorAll("#qmodal-progress .qmodal-dot");
+  var progressEl = document.getElementById("qmodal-progress");
   var closeBtn = document.getElementById("qmodal-close");
-  var answers = { q1:"", q2:"", q3:"", q4:"" };
+  var EMPTY = { q1:"", q2:"", q3:"", q4:"", q5:"", q6:"", q7:"" };
+  var answers = Object.assign({}, EMPTY);
   var currentStep = 1;
   var lastFocused = null;
+
+  // Which data-step values represent visible questions in the current flow.
+  // Q5 is included only when Q3="yes".
+  function questionSteps(){
+    return answers.q3 === "yes" ? [1,2,3,4,5,6,7] : [1,2,3,4,6,7];
+  }
+  function flowSteps(){ return questionSteps().concat([8]); } // 8 = form
+  function progressIndex(n){
+    var f = flowSteps();
+    var i = f.indexOf(n);
+    return i; // -1 if success step (9) or unknown
+  }
+  function rebuildDots(){
+    var total = flowSteps().length;
+    progressEl.innerHTML = "";
+    for(var i=0;i<total;i++){
+      var d = document.createElement("span");
+      d.className = "qmodal-dot";
+      progressEl.appendChild(d);
+    }
+    // Update "X of N" labels on all question steps
+    var qs = questionSteps();
+    modal.querySelectorAll(".qmodal-count").forEach(function(el){
+      var of = parseInt(el.getAttribute("data-count-of"),10);
+      var pos = qs.indexOf(of);
+      el.textContent = pos >= 0 ? ((pos+1) + " of " + qs.length) : "";
+    });
+  }
 
   function uuidv4(){
     if(window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
@@ -1180,16 +1242,34 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
     steps.forEach(function(s){
       s.classList.toggle("active", parseInt(s.getAttribute("data-step"),10) === n);
     });
-    // progress dots: dot indices 0-3 = q1-q4, dot 4 = form
+    var dots = progressEl.querySelectorAll(".qmodal-dot");
+    var idx = progressIndex(n);
     dots.forEach(function(d,i){
       d.classList.remove("active","done");
-      if(i < Math.min(n,5) - 1) d.classList.add("done");
-      if(i === Math.min(n,5) - 1) d.classList.add("active");
+      if(idx < 0){ d.classList.add("done"); return; } // success step: all done
+      if(i < idx) d.classList.add("done");
+      if(i === idx) d.classList.add("active");
     });
   }
 
+  function nextQuestionStep(n){
+    var f = flowSteps();
+    var i = f.indexOf(n);
+    return i >= 0 && i < f.length - 1 ? f[i+1] : 8;
+  }
+  function prevQuestionStep(n){
+    var f = flowSteps();
+    var i = f.indexOf(n);
+    return i > 0 ? f[i-1] : 1;
+  }
+
   function computeQualified(){
-    return answers.q1==="yes" && answers.q2==="yes" && answers.q3==="no" && answers.q4==="no";
+    return answers.q1 === "18plus" &&
+           answers.q2 === "yes" &&
+           answers.q4 === "no" &&
+           (answers.q3 === "no" || answers.q5 === "no") &&
+           answers.q6 === "no" &&
+           answers.q7 === "yes";
   }
 
   function openModal(){
@@ -1200,11 +1280,12 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
     modal.classList.add("open");
     document.body.classList.add("qmodal-locked");
     // reset state
-    answers = { q1:"", q2:"", q3:"", q4:"" };
+    answers = Object.assign({}, EMPTY);
     modal.querySelectorAll(".qmodal-choice.selected").forEach(function(b){ b.classList.remove("selected"); });
     form.reset();
     document.getElementById("gst-submit-btn").disabled = true;
     document.getElementById("gst-form-error").hidden = true;
+    rebuildDots();
     showStep(1);
     setTimeout(function(){ closeBtn.focus(); }, 60);
   }
@@ -1240,16 +1321,22 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
       var stepEl = btn.closest(".qmodal-step");
       stepEl.querySelectorAll(".qmodal-choice").forEach(function(b){ b.classList.remove("selected"); });
       btn.classList.add("selected");
+      // If Q3 answered, flow length may change — rebuild dots + labels
+      if(q === "q3") rebuildDots();
       setTimeout(function(){
-        if(currentStep < 4){ showStep(currentStep + 1); }
-        else { advanceToForm(); }
+        var nxt = nextQuestionStep(currentStep);
+        if(nxt === 8){ advanceToForm(); }
+        else { showStep(nxt); }
       }, 300);
     });
   });
 
   // Back buttons
   modal.querySelectorAll("[data-qmodal-back]").forEach(function(b){
-    b.addEventListener("click", function(){ if(currentStep > 1) showStep(currentStep - 1); });
+    b.addEventListener("click", function(){
+      var prev = prevQuestionStep(currentStep);
+      if(prev !== currentStep) showStep(prev);
+    });
   });
 
   function advanceToForm(){
@@ -1260,15 +1347,18 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
       h.textContent = "You likely qualify.";
       intro.textContent = "First-time buyers can get up to 5% of the price back on a new home. Share your details and a Martell advisor will confirm your exact savings + next steps.";
     } else {
-      h.textContent = "You may still qualify for the standard New Housing Rebate.";
-      intro.textContent = "The first-time-buyer top-up doesn't apply, but the base rebate might. Share your details and a Martell advisor will run the numbers with you.";
+      h.textContent = "You may not qualify for the first-time rebate — but you may still be eligible for the standard New Housing Rebate. Let's check.";
+      intro.textContent = "Share your details and a Martell advisor will run the numbers with you.";
     }
     // stash into hidden fields
     form.querySelector('input[name="qualified"]').value = qualified ? "yes" : "no";
-    form.querySelector('input[name="q1_primary_home"]').value = answers.q1;
-    form.querySelector('input[name="q2_citizen_18plus"]').value = answers.q2;
-    form.querySelector('input[name="q3_owned_home_4yr"]').value = answers.q3;
-    form.querySelector('input[name="q4_prior_rebate"]').value = answers.q4;
+    form.querySelector('input[name="q1_age"]').value = answers.q1;
+    form.querySelector('input[name="q2_citizen_pr"]').value = answers.q2;
+    form.querySelector('input[name="q3_has_partner"]').value = answers.q3;
+    form.querySelector('input[name="q4_self_owned_4yr"]').value = answers.q4;
+    form.querySelector('input[name="q5_partner_owned_4yr"]').value = answers.q3 === "yes" ? answers.q5 : "n/a";
+    form.querySelector('input[name="q6_prior_rebate"]').value = answers.q6;
+    form.querySelector('input[name="q7_primary_home"]').value = answers.q7;
     // copy attribution from main form (populated by attribution.js)
     var main = document.getElementById("lead-form");
     if(main){
@@ -1284,7 +1374,7 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
     } else {
       form.querySelector('input[name="page_url"]').value = window.location.href;
     }
-    showStep(5);
+    showStep(8);
   }
 
   // Enable submit when consent ticked
@@ -1388,7 +1478,7 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
       sp.textContent = "A Martell advisor will still reach out to run the New Housing Rebate numbers with you.";
     }
     setSubmitting(false);
-    showStep(6);
+    showStep(9);
   });
 })();
 
