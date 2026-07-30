@@ -229,39 +229,69 @@ a{color:inherit;text-decoration:none}
 .chip:hover{opacity:1}
 .ribbon{display:inline-block;margin-top:1rem;padding:0.4rem 0.85rem;background:var(--teal);color:var(--whitish);font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;border-radius:9999px}
 
-/* ------- GST module (Chapter 04) ------- */
+/* ------- GST qualifier module (Chapter 04) ------- */
 .gst-scene{max-width:64rem;margin:0 auto}
 .gst-h2{font-family:var(--serif);font-weight:500;font-size:clamp(2.4rem,7vw,6rem);line-height:1.02;letter-spacing:-0.02em;margin-top:1.5rem;text-wrap:balance}
-.gst-body{margin-top:2.25rem;max-width:44ch;font-size:1.0625rem;line-height:1.75;opacity:0.82}
+.gst-sub{margin-top:1.75rem;max-width:44ch;font-size:1.125rem;line-height:1.65;opacity:0.86}
+.gst-bullets{margin-top:2.75rem;display:grid;grid-template-columns:1fr;gap:1.25rem;max-width:52rem}
+@media(min-width:800px){.gst-bullets{grid-template-columns:1fr 1fr 1fr;gap:1.5rem}}
+.gst-bullet{display:flex;gap:1rem;align-items:flex-start;padding:1.4rem 1.25rem;border:1px solid rgba(14,38,34,0.1);border-radius:0.9rem;background:rgba(255,255,255,0.4);transition:transform 350ms var(--ease-out),box-shadow 350ms var(--ease-out),border-color 350ms}
+.gst-bullet:hover{transform:translateY(-3px);box-shadow:var(--shadow-warm);border-color:rgba(22,136,118,0.35)}
+.gst-bullet-icon{flex-shrink:0;height:2.2rem;width:2.2rem;border-radius:9999px;background:rgba(22,136,118,0.12);color:var(--teal);display:inline-flex;align-items:center;justify-content:center}
+.gst-bullet-icon svg{width:1.05rem;height:1.05rem}
+.gst-bullet-text{font-size:0.95rem;line-height:1.55;color:rgba(14,38,34,0.85)}
+.gst-bullet-text strong{color:var(--midnight);font-weight:600}
 
-.gst-calc{margin-top:3.5rem;padding:2.5rem;background:rgba(255,255,255,0.55);border:1px solid rgba(14,38,34,0.1);border-radius:1.25rem;box-shadow:var(--shadow-warm);transition:box-shadow 400ms var(--ease-out)}
-.gst-calc:hover{box-shadow:var(--shadow-lift)}
-@media(max-width:640px){.gst-calc{padding:1.75rem}}
-.gst-calc-label{font-size:0.72rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:rgba(14,38,34,0.55)}
-.gst-price-row{margin-top:0.85rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap}
-.gst-step{width:2.4rem;height:2.4rem;border-radius:9999px;border:1px solid rgba(14,38,34,0.2);color:var(--midnight);display:inline-flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all 250ms var(--ease-out);cursor:pointer;flex-shrink:0}
-.gst-step:hover{border-color:var(--teal);color:var(--teal);transform:scale(1.06)}
-.gst-step:active{transform:scale(0.94)}
-.gst-price-display{font-family:var(--serif);font-size:clamp(1.6rem,3.2vw,2.2rem);color:var(--midnight);flex:1;min-width:8rem;letter-spacing:-0.01em}
-#gst-price{width:100%;background:transparent;border:0;font-family:var(--serif);font-size:inherit;color:inherit;font-weight:500;padding:0.3rem 0;letter-spacing:-0.01em}
-#gst-price:focus{outline:0;color:var(--teal)}
-#gst-slider{width:100%;margin-top:1rem;-webkit-appearance:none;appearance:none;height:3px;background:linear-gradient(to right,var(--teal) 0%,var(--teal) var(--fill,20%),rgba(14,38,34,0.15) var(--fill,20%),rgba(14,38,34,0.15) 100%);border-radius:9999px;outline:0;cursor:pointer}
-#gst-slider::-webkit-slider-thumb{-webkit-appearance:none;height:1.35rem;width:1.35rem;border-radius:9999px;background:var(--midnight);border:3px solid var(--cream);box-shadow:0 4px 10px rgba(14,38,34,0.3);cursor:grab;transition:transform 200ms}
-#gst-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
-#gst-slider::-moz-range-thumb{height:1.35rem;width:1.35rem;border-radius:9999px;background:var(--midnight);border:3px solid var(--cream);box-shadow:0 4px 10px rgba(14,38,34,0.3);cursor:grab}
+.gst-cta-row{margin-top:2.75rem;display:flex;flex-wrap:wrap;align-items:center;gap:1.25rem}
+.gst-cta{display:inline-flex;align-items:center;gap:0.85rem;padding:1.2rem 2rem;background:var(--midnight);color:var(--whitish);font-size:0.95rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;transition:all 0.35s var(--ease-out);border:0;font-family:inherit;border-radius:9999px;cursor:pointer}
+.gst-cta:hover{background:var(--teal);letter-spacing:0.18em}
+.gst-cta svg{width:0.85rem;height:0.85rem;transition:transform 0.35s var(--ease-out)}
+.gst-cta:hover svg{transform:translateX(4px)}
 
-.gst-range-labels{display:flex;justify-content:space-between;margin-top:0.5rem;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(14,38,34,0.4)}
-
-.gst-output{margin-top:2.5rem;padding-top:2rem;border-top:1px dashed rgba(14,38,34,0.15)}
-.gst-output-label{font-size:0.72rem;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:rgba(14,38,34,0.55)}
-.gst-output-num{font-family:var(--serif);font-weight:500;font-size:clamp(3rem,8vw,5.5rem);line-height:1;color:var(--teal);letter-spacing:-0.02em;margin-top:0.75rem;font-variant-numeric:tabular-nums;transition:color 250ms}
-.gst-output-num.zero{color:rgba(14,38,34,0.35)}
-.gst-output-context{margin-top:1rem;font-family:var(--serif);font-style:italic;font-size:1.05rem;line-height:1.55;color:rgba(14,38,34,0.75);max-width:36rem}
-.gst-output-cta{margin-top:2rem}
-
-.gst-foot{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid rgba(14,38,34,0.12);font-size:0.8rem;line-height:1.65;color:rgba(14,38,34,0.55);max-width:44rem}
-.gst-foot a{color:var(--teal);border-bottom:1px solid rgba(22,136,118,0.4);transition:border-color 250ms}
+.gst-foot{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid rgba(14,38,34,0.12);font-size:0.8rem;line-height:1.65;color:rgba(14,38,34,0.55);max-width:44rem;font-style:italic}
+.gst-foot a{color:var(--teal);border-bottom:1px solid rgba(22,136,118,0.4);transition:border-color 250ms;font-style:normal}
 .gst-foot a:hover{border-color:var(--teal)}
+
+/* ------- Qualifier modal ------- */
+.qmodal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(14,38,34,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:1.5rem;opacity:0;transition:opacity 250ms var(--ease-out)}
+.qmodal-backdrop.open{display:flex;opacity:1}
+.qmodal-card{position:relative;background:var(--cream);color:var(--midnight);max-width:32rem;width:100%;border-radius:1rem;padding:2rem;box-shadow:var(--shadow-lift);max-height:90vh;overflow-y:auto;transform:scale(0.94);opacity:0;transition:transform 250ms var(--ease-out),opacity 250ms var(--ease-out)}
+.qmodal-backdrop.open .qmodal-card{transform:none;opacity:1}
+@media(max-width:640px){.qmodal-card{padding:1.5rem}}
+.qmodal-close{position:absolute;top:1rem;right:1rem;height:2.2rem;width:2.2rem;border-radius:9999px;color:rgba(14,38,34,0.55);display:inline-flex;align-items:center;justify-content:center;transition:color 250ms,background 250ms}
+.qmodal-close:hover{color:var(--midnight);background:rgba(14,38,34,0.06)}
+.qmodal-close svg{width:1.1rem;height:1.1rem}
+.qmodal-eyebrow{font-family:var(--serif);font-weight:400;font-size:0.8rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--teal)}
+.qmodal-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.6rem,3vw,2.1rem);line-height:1.1;letter-spacing:-0.015em;margin-top:0.85rem;text-wrap:balance}
+.qmodal-progress{margin-top:1.5rem;display:flex;gap:0.5rem;align-items:center}
+.qmodal-dot{width:0.55rem;height:0.55rem;border-radius:9999px;background:rgba(14,38,34,0.18);transition:background 300ms,transform 300ms}
+.qmodal-dot.active{background:var(--teal);transform:scale(1.25)}
+.qmodal-dot.done{background:var(--teal)}
+.qmodal-steps{position:relative;margin-top:1.75rem;min-height:16rem}
+.qmodal-step{opacity:0;transform:translateX(24px);transition:opacity 300ms var(--ease-out),transform 300ms var(--ease-out);pointer-events:none;position:absolute;inset:0}
+.qmodal-step.active{opacity:1;transform:none;pointer-events:auto;position:relative}
+.qmodal-q{font-family:var(--serif);font-weight:500;font-size:1.2rem;line-height:1.35;color:var(--midnight);text-wrap:balance}
+.qmodal-choices{margin-top:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:0.85rem}
+.qmodal-choice{min-height:4.5rem;border:1px solid rgba(14,38,34,0.18);border-radius:0.75rem;background:rgba(255,255,255,0.5);color:var(--midnight);font-family:var(--serif);font-weight:500;font-size:1.15rem;letter-spacing:0.02em;transition:all 250ms var(--ease-out);cursor:pointer}
+.qmodal-choice:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-2px);box-shadow:var(--shadow-warm)}
+.qmodal-choice.selected{border-color:var(--teal);background:var(--teal);color:var(--whitish)}
+.qmodal-nav{margin-top:1.5rem;display:flex;justify-content:space-between;align-items:center;font-size:0.85rem;color:rgba(14,38,34,0.55)}
+.qmodal-back{color:var(--teal);border-bottom:1px solid rgba(22,136,118,0.4);padding-bottom:1px;font-size:0.85rem;transition:border-color 250ms}
+.qmodal-back:hover{border-color:var(--teal)}
+.qmodal-back[hidden]{display:none}
+
+.qmodal-form{margin-top:1.25rem;display:flex;flex-direction:column;gap:1.35rem}
+.qmodal-form .field label{font-size:0.7rem;letter-spacing:0.22em}
+.qmodal-form-intro{font-size:0.95rem;line-height:1.6;color:rgba(14,38,34,0.8);margin-top:0.5rem}
+
+.qmodal-result{text-align:left}
+.qmodal-result-h{font-family:var(--serif);font-weight:500;font-size:clamp(1.6rem,3vw,2.1rem);line-height:1.15;color:var(--midnight);text-wrap:balance}
+.qmodal-result-p{margin-top:1rem;font-size:1rem;line-height:1.6;color:rgba(14,38,34,0.8)}
+.qmodal-result-ctas{margin-top:1.75rem;display:flex;flex-direction:column;gap:0.85rem}
+.qmodal-result-ctas .gst-cta{width:100%;justify-content:center}
+.qmodal-secondary{color:var(--teal);border-bottom:1px solid rgba(22,136,118,0.4);padding-bottom:2px;font-size:0.9rem;letter-spacing:0.04em;font-family:var(--sans);align-self:center;transition:border-color 250ms;cursor:pointer;background:none;border-top:0;border-left:0;border-right:0}
+.qmodal-secondary:hover{border-bottom-color:var(--teal)}
+body.qmodal-locked{overflow:hidden}
 
 /* ------- Testimonial ------- */
 .test-inner{max-width:70rem;margin:0 auto;text-align:center}
@@ -534,42 +564,199 @@ a{color:inherit;text-decoration:none}
   </div>
 </section>
 
-<!-- ===== CH 04 · GST rebate + calculator ===== -->
+<!-- ===== CH 04 · GST qualifier ===== -->
 <section class="chapter light" id="ch-gst">
   <div class="wrap">
     <div class="gst-scene">
       <span class="numeral" data-reveal>04 &nbsp;—&nbsp; The GST rebate</span>
-      <h2 class="gst-h2" data-reveal>See what your <em class="italic-teal">GST rebate</em> could be.</h2>
-      <p class="gst-body" data-reveal>New-construction homes may qualify for a federal GST rebate — a meaningful consideration for first-time buyers weighing new against resale. A Riverview Heights home from $380,000, for example, works out to roughly $19,000 in federal GST — and up to $50,000 back on higher-priced builds.</p>
+      <h2 class="gst-h2" data-reveal>First-time buyer? The <em class="italic-teal">GST</em> could be on us.</h2>
+      <p class="gst-sub" data-reveal>Thanks to the new federal First-Time Home Buyers' GST Rebate, eligible first-time buyers pay <strong>$0 federal GST</strong> on a brand-new Martell home.</p>
 
-      <div class="gst-calc" data-reveal role="group" aria-labelledby="gst-calc-title">
-        <div class="gst-calc-label" id="gst-calc-title">Your home price</div>
-        <div class="gst-price-row">
-          <button type="button" class="gst-step" id="gst-minus" aria-label="Decrease price by $10,000">−</button>
-          <div class="gst-price-display">
-            <input id="gst-price" type="text" inputmode="numeric" value="$380,000" aria-label="Home price" data-track="gst_calc_change" data-price="380000">
-          </div>
-          <button type="button" class="gst-step" id="gst-plus" aria-label="Increase price by $10,000">+</button>
+      <div class="gst-bullets" data-reveal>
+        <div class="gst-bullet">
+          <span class="gst-bullet-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l3-3 5 5 9-9"/><path d="M14 5h6v6"/></svg></span>
+          <p class="gst-bullet-text">On a new <strong>Riverview Heights</strong> home from <strong>$380,000</strong>, that's <strong>up to about $19,000 back</strong>.</p>
         </div>
-        <input id="gst-slider" type="range" min="200000" max="2000000" step="10000" value="380000" aria-label="Home price slider">
-        <div class="gst-range-labels"><span>$200K</span><span>$1.1M</span><span>$2M</span></div>
-
-        <div class="gst-output">
-          <div class="gst-output-label">Approximately back</div>
-          <div class="gst-output-num" id="gst-rebate" data-rebate="19000">$19,000</div>
-          <p class="gst-output-context" id="gst-context">You'd get back 100% of the 5% federal GST — the maximum federal rebate on this price.</p>
-          <div class="gst-output-cta">
-            <a class="mark" href="#get-in-touch" data-track="gst_calc_cta_click">Talk to Pierre about your build
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
+        <div class="gst-bullet">
+          <span class="gst-bullet-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg></span>
+          <p class="gst-bullet-text">100% of the 5% federal GST on new homes up to $1M (partial to $1.5M, max <strong>$50,000</strong>).</p>
+        </div>
+        <div class="gst-bullet">
+          <span class="gst-bullet-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18v10H3z"/><path d="M3 11h18"/><path d="M8 15h4"/></svg></span>
+          <p class="gst-bullet-text">Your builder can <strong>credit it right at closing</strong> — off your price, not a wait for a refund.</p>
         </div>
       </div>
 
-      <p class="gst-foot" data-reveal>Illustrative estimate — approximately, up to $50,000. Rebate applies to first-time buyers on new builds; agreements signed before 2031. General information, not tax advice — confirm eligibility with your accountant. <a href="https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/gst-hst-rebates/first-time-home-buyers-gst-hst-rebate/what-rebate.html" target="_blank" rel="noopener">See canada.ca →</a></p>
+      <div class="gst-cta-row" data-reveal>
+        <button type="button" class="gst-cta" data-qmodal-open data-track="gst_qualifier_open" data-event="select_content" data-link-id="gst_qualifier_open">
+          See if you qualify — 30 seconds
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+
+      <p class="gst-foot" data-reveal>General information, not tax advice. Eligibility and amount are confirmed with your accountant. See <a href="https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/gst-hst-rebates/first-time-home-buyers-gst-hst-rebate/what-rebate.html" target="_blank" rel="noopener">canada.ca</a>.</p>
     </div>
   </div>
 </section>
+
+<!-- ===== GST qualifier modal ===== -->
+<div class="qmodal-backdrop" id="qmodal" role="dialog" aria-modal="true" aria-labelledby="qmodal-title" hidden>
+  <div class="qmodal-card" role="document">
+    <button type="button" class="qmodal-close" id="qmodal-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <span class="qmodal-eyebrow">— GST qualifier</span>
+    <h3 class="qmodal-title" id="qmodal-title">See if you qualify — 30 seconds.</h3>
+
+    <div class="qmodal-progress" id="qmodal-progress" aria-hidden="true">
+      <span class="qmodal-dot active"></span>
+      <span class="qmodal-dot"></span>
+      <span class="qmodal-dot"></span>
+      <span class="qmodal-dot"></span>
+      <span class="qmodal-dot"></span>
+    </div>
+
+    <div class="qmodal-steps" id="qmodal-steps">
+      <!-- Step 1 -->
+      <div class="qmodal-step active" data-step="1">
+        <p class="qmodal-q">Will this be your <strong>primary home</strong>?</p>
+        <div class="qmodal-choices">
+          <button type="button" class="qmodal-choice" data-q="q1" data-a="yes">Yes</button>
+          <button type="button" class="qmodal-choice" data-q="q1" data-a="no">No</button>
+        </div>
+        <div class="qmodal-nav">
+          <span></span>
+          <span>1 of 4</span>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div class="qmodal-step" data-step="2">
+        <p class="qmodal-q">Are you <strong>18+ and a Canadian citizen or permanent resident</strong>?</p>
+        <div class="qmodal-choices">
+          <button type="button" class="qmodal-choice" data-q="q2" data-a="yes">Yes</button>
+          <button type="button" class="qmodal-choice" data-q="q2" data-a="no">No</button>
+        </div>
+        <div class="qmodal-nav">
+          <button type="button" class="qmodal-back" data-qmodal-back>← Back</button>
+          <span>2 of 4</span>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="qmodal-step" data-step="3">
+        <p class="qmodal-q">Have you (or your spouse/common-law partner) <strong>owned & lived in your own home</strong> in the current or previous 4 calendar years?</p>
+        <div class="qmodal-choices">
+          <button type="button" class="qmodal-choice" data-q="q3" data-a="yes">Yes</button>
+          <button type="button" class="qmodal-choice" data-q="q3" data-a="no">No</button>
+        </div>
+        <div class="qmodal-nav">
+          <button type="button" class="qmodal-back" data-qmodal-back>← Back</button>
+          <span>3 of 4</span>
+        </div>
+      </div>
+      <!-- Step 4 -->
+      <div class="qmodal-step" data-step="4">
+        <p class="qmodal-q">Have you <strong>received the first-time buyer GST rebate before</strong>?</p>
+        <div class="qmodal-choices">
+          <button type="button" class="qmodal-choice" data-q="q4" data-a="yes">Yes</button>
+          <button type="button" class="qmodal-choice" data-q="q4" data-a="no">No</button>
+        </div>
+        <div class="qmodal-nav">
+          <button type="button" class="qmodal-back" data-qmodal-back>← Back</button>
+          <span>4 of 4</span>
+        </div>
+      </div>
+
+      <!-- Step 5 · contact capture -->
+      <div class="qmodal-step" data-step="5">
+        <h4 class="qmodal-result-h" id="qmodal-form-h">You likely qualify.</h4>
+        <p class="qmodal-form-intro" id="qmodal-form-intro">First-time buyers can get up to 5% of the price back on a new home. Share your details and a Martell advisor will confirm your exact savings + next steps.</p>
+
+        <form id="gst-qualifier-form" class="qmodal-form" novalidate>
+          <div class="field">
+            <label for="gq-name">Name <span class="req">*</span></label>
+            <input id="gq-name" type="text" name="name" required autocomplete="name" placeholder="Your name">
+            <span class="field-underline" aria-hidden="true"></span>
+          </div>
+          <div class="field">
+            <label for="gq-email">Email <span class="req">*</span></label>
+            <input id="gq-email" type="email" name="email" required autocomplete="email" placeholder="you@example.com">
+            <span class="field-underline" aria-hidden="true"></span>
+          </div>
+          <div class="field">
+            <label for="gq-phone">Phone <span class="req">*</span></label>
+            <input id="gq-phone" type="tel" name="phone" required autocomplete="tel" placeholder="(506) 000-0000">
+            <span class="field-underline" aria-hidden="true"></span>
+          </div>
+          <div class="field">
+            <label for="gq-community">Community interest <span class="req">*</span></label>
+            <select id="gq-community" name="community" required>
+              <option value="" selected disabled>Choose one</option>
+              <option value="Riverview Heights">Riverview Heights</option>
+              <option value="The Village at Jonathan Park">Jonathan Park</option>
+              <option value="The Village at The Fairways">The Fairways</option>
+              <option value="The Village at Brookside West">Brookside West</option>
+              <option value="The Village at Valley Estates">Valley Estates</option>
+            </select>
+            <span class="field-underline" aria-hidden="true"></span>
+          </div>
+
+          <!-- Hidden attribution + qualifier fields -->
+          <input type="hidden" name="lead_source" value="gst_qualifier">
+          <input type="hidden" name="qualified" value="">
+          <input type="hidden" name="q1_primary_home" value="">
+          <input type="hidden" name="q2_citizen_18plus" value="">
+          <input type="hidden" name="q3_owned_home_4yr" value="">
+          <input type="hidden" name="q4_prior_rebate" value="">
+          <input type="hidden" name="page_url" value="">
+          <input type="hidden" name="page_variant" value="lifestyle">
+          <input type="hidden" name="gclid" value="">
+          <input type="hidden" name="gbraid" value="">
+          <input type="hidden" name="wbraid" value="">
+          <input type="hidden" name="utm_source" value="">
+          <input type="hidden" name="utm_medium" value="">
+          <input type="hidden" name="utm_campaign" value="">
+          <input type="hidden" name="utm_term" value="">
+          <input type="hidden" name="utm_content" value="">
+          <input type="hidden" name="event_id" value="">
+          <input type="hidden" name="test_lead" value="false">
+          <input type="hidden" name="consent_version" value="2026-07-30">
+          <input type="hidden" name="turnstile_token" value="">
+          <input type="hidden" name="email_consent_text" value="Yes, send me updates about Martell communities and building my first custom home. I can unsubscribe anytime.">
+
+          <div class="honeypot" aria-hidden="true">
+            <label>Website URL <input type="text" name="website_url" tabindex="-1" autocomplete="off"></label>
+          </div>
+
+          <label class="consent-row" for="gq-consent">
+            <input id="gq-consent" type="checkbox" name="email_consent" required>
+            <span>Yes, send me updates about Martell communities and building my first custom home. I can unsubscribe anytime.</span>
+          </label>
+
+          <button id="gst-submit-btn" type="submit" class="submit" disabled>
+            See my result
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p id="gst-form-error" class="form-error" hidden role="alert"></p>
+        </form>
+      </div>
+
+      <!-- Step 6 · success -->
+      <div class="qmodal-step" data-step="6">
+        <div class="qmodal-result">
+          <h4 class="qmodal-result-h" id="qmodal-success-h">Looks promising.</h4>
+          <p class="qmodal-result-p" id="qmodal-success-p">A Martell advisor will confirm your exact savings and next steps.</p>
+          <div class="qmodal-result-ctas">
+            <a class="gst-cta" href="tel:[phone]" data-track="gst_qualifier_call" data-event="select_content" data-link-id="phone">
+              Talk to Pierre now
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <button type="button" class="qmodal-secondary" data-qmodal-close>Continue exploring →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ===== CH 05 · Real Martell buyers ===== -->
 <section class="chapter dark" id="ch-homeowners">
@@ -747,7 +934,8 @@ a{color:inherit;text-decoration:none}
 {"@type":"Question","name":"What does the Martell custom-home process look like from start to keys?","acceptedAnswer":{"@type":"Answer","text":"From land selection and design consultations through permitting, construction, and final walk-through, every Martell build follows a mapped-out sequence with a single point of contact for the buyer."}},
 {"@type":"Question","name":"How long does a Martell home take to build?","acceptedAnswer":{"@type":"Answer","text":"Typical builds run 8 to 14 months from ground-breaking depending on the community, home size, and finishing package. The team gives every buyer a personalized timeline before signing."}},
 {"@type":"Question","name":"Which of your New Brunswick communities is a good fit for a first custom home?","acceptedAnswer":{"@type":"Answer","text":"Each community has entry-level lots and floor plans suited for first-time buyers. Get in touch and the team will match you to the community that fits your budget, commute, and family plans."}},
-{"@type":"Question","name":"Do Martell new-construction homes qualify for GST rebate consideration?","acceptedAnswer":{"@type":"Answer","text":"New-construction homes may qualify for a federal GST rebate on eligible new builds. Martell communities are built for eligibility consideration; the team walks first-time buyers through the details on request. Eligibility is confirmed with your accountant and current Canada Revenue Agency rules."}}
+{"@type":"Question","name":"Do Martell new-construction homes qualify for GST rebate consideration?","acceptedAnswer":{"@type":"Answer","text":"New-construction homes may qualify for a federal GST rebate on eligible new builds. Martell communities are built for eligibility consideration; the team walks first-time buyers through the details on request. Eligibility is confirmed with your accountant and current Canada Revenue Agency rules."}},
+{"@type":"Question","name":"How do I know if I qualify for the FTHB GST rebate?","acceptedAnswer":{"@type":"Answer","text":"Four CRA conditions apply: the home must be your primary residence; you must be 18+ and a Canadian citizen or permanent resident; neither you nor your spouse/common-law partner has owned and lived in your own home in the current or previous four calendar years; and you must not have received the first-time buyer GST rebate before. See canada.ca and confirm with your accountant."}}
 ]}
 </script>
 <script type="application/ld+json">
@@ -964,93 +1152,244 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
   }
 })();
 
-/* ===== GST rebate calculator ===== */
-(function initGST(){
-  var priceInput = document.getElementById("gst-price");
-  var slider = document.getElementById("gst-slider");
-  var minus = document.getElementById("gst-minus");
-  var plus = document.getElementById("gst-plus");
-  var rebateEl = document.getElementById("gst-rebate");
-  var ctx = document.getElementById("gst-context");
-  if(!priceInput || !slider || !rebateEl) return;
+/* ===== GST qualifier modal + form ===== */
+(function initGSTQualifier(){
+  var modal = document.getElementById("qmodal");
+  var form = document.getElementById("gst-qualifier-form");
+  if(!modal || !form) return;
 
-  var MIN = 200000, MAX = 2000000, STEP = 10000;
-  var currentDisplayed = 19000;
+  var WEBHOOK_URL = "PASTE_WEBHOOK_URL_BEFORE_BUILD";
+  var FALLBACK_EMAIL = "pierre@themartellexperience.com";
 
-  function fmt(n){ return "$" + Math.round(n).toLocaleString("en-CA"); }
-  function parsePrice(s){ return parseInt(String(s).replace(/[^0-9]/g,""),10) || 0; }
+  var steps = modal.querySelectorAll(".qmodal-step");
+  var dots = modal.querySelectorAll("#qmodal-progress .qmodal-dot");
+  var closeBtn = document.getElementById("qmodal-close");
+  var answers = { q1:"", q2:"", q3:"", q4:"" };
+  var currentStep = 1;
+  var lastFocused = null;
 
-  function calcRebate(price){
-    if(price <= 1000000) return Math.min(50000, price * 0.05);
-    if(price < 1500000) return 50000 * (1500000 - price) / 500000;
-    return 0;
+  function uuidv4(){
+    if(window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){
+      var r=(Math.random()*16)|0, v=c==="x"?r:(r&0x3)|0x8; return v.toString(16);
+    });
   }
 
-  function contextFor(price){
-    if(price <= 1000000) return "You'd get back 100% of the 5% federal GST — the maximum federal rebate on this price.";
-    if(price < 1500000) return "You're in the phase-out zone — the rebate decreases as price rises above $1M.";
-    return "Above $1.5M, the federal FTHB rebate is $0. You may still qualify for the standard GST/HST New Housing Rebate.";
+  function showStep(n){
+    currentStep = n;
+    steps.forEach(function(s){
+      s.classList.toggle("active", parseInt(s.getAttribute("data-step"),10) === n);
+    });
+    // progress dots: dot indices 0-3 = q1-q4, dot 4 = form
+    dots.forEach(function(d,i){
+      d.classList.remove("active","done");
+      if(i < Math.min(n,5) - 1) d.classList.add("done");
+      if(i === Math.min(n,5) - 1) d.classList.add("active");
+    });
   }
 
-  function animateTo(target){
-    if(REDUCED){
-      currentDisplayed = target;
-      rebateEl.textContent = fmt(target);
-      rebateEl.classList.toggle("zero", target === 0);
+  function computeQualified(){
+    return answers.q1==="yes" && answers.q2==="yes" && answers.q3==="no" && answers.q4==="no";
+  }
+
+  function openModal(){
+    lastFocused = document.activeElement;
+    modal.hidden = false;
+    // force reflow before adding .open so transition plays
+    void modal.offsetWidth;
+    modal.classList.add("open");
+    document.body.classList.add("qmodal-locked");
+    // reset state
+    answers = { q1:"", q2:"", q3:"", q4:"" };
+    modal.querySelectorAll(".qmodal-choice.selected").forEach(function(b){ b.classList.remove("selected"); });
+    form.reset();
+    document.getElementById("gst-submit-btn").disabled = true;
+    document.getElementById("gst-form-error").hidden = true;
+    showStep(1);
+    setTimeout(function(){ closeBtn.focus(); }, 60);
+  }
+
+  function closeModal(){
+    modal.classList.remove("open");
+    document.body.classList.remove("qmodal-locked");
+    setTimeout(function(){ modal.hidden = true; }, 250);
+    if(lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+
+  // Open triggers
+  document.querySelectorAll("[data-qmodal-open]").forEach(function(el){
+    el.addEventListener("click", function(){ openModal(); });
+  });
+  // Close triggers
+  closeBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", function(e){ if(e.target === modal) closeModal(); });
+  modal.querySelectorAll("[data-qmodal-close]").forEach(function(el){
+    el.addEventListener("click", closeModal);
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && !modal.hidden) closeModal();
+  });
+
+  // Choice clicks
+  modal.querySelectorAll(".qmodal-choice").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var q = btn.getAttribute("data-q");
+      var a = btn.getAttribute("data-a");
+      answers[q] = a;
+      // visual select within its step
+      var stepEl = btn.closest(".qmodal-step");
+      stepEl.querySelectorAll(".qmodal-choice").forEach(function(b){ b.classList.remove("selected"); });
+      btn.classList.add("selected");
+      setTimeout(function(){
+        if(currentStep < 4){ showStep(currentStep + 1); }
+        else { advanceToForm(); }
+      }, 300);
+    });
+  });
+
+  // Back buttons
+  modal.querySelectorAll("[data-qmodal-back]").forEach(function(b){
+    b.addEventListener("click", function(){ if(currentStep > 1) showStep(currentStep - 1); });
+  });
+
+  function advanceToForm(){
+    var qualified = computeQualified();
+    var h = document.getElementById("qmodal-form-h");
+    var intro = document.getElementById("qmodal-form-intro");
+    if(qualified){
+      h.textContent = "You likely qualify.";
+      intro.textContent = "First-time buyers can get up to 5% of the price back on a new home. Share your details and a Martell advisor will confirm your exact savings + next steps.";
+    } else {
+      h.textContent = "You may still qualify for the standard New Housing Rebate.";
+      intro.textContent = "The first-time-buyer top-up doesn't apply, but the base rebate might. Share your details and a Martell advisor will run the numbers with you.";
+    }
+    // stash into hidden fields
+    form.querySelector('input[name="qualified"]').value = qualified ? "yes" : "no";
+    form.querySelector('input[name="q1_primary_home"]').value = answers.q1;
+    form.querySelector('input[name="q2_citizen_18plus"]').value = answers.q2;
+    form.querySelector('input[name="q3_owned_home_4yr"]').value = answers.q3;
+    form.querySelector('input[name="q4_prior_rebate"]').value = answers.q4;
+    // copy attribution from main form (populated by attribution.js)
+    var main = document.getElementById("lead-form");
+    if(main){
+      ["page_url","gclid","gbraid","wbraid","utm_source","utm_medium","utm_campaign","utm_term","utm_content","test_lead"].forEach(function(k){
+        var src = main.querySelector('input[name="'+k+'"]');
+        var dst = form.querySelector('input[name="'+k+'"]');
+        if(src && dst) dst.value = src.value;
+      });
+      // Turnstile token is single-widget on page (shared) — pull latest
+      var tsSrc = main.querySelector('input[name="turnstile_token"]');
+      var tsDst = form.querySelector('input[name="turnstile_token"]');
+      if(tsSrc && tsDst) tsDst.value = tsSrc.value;
+    } else {
+      form.querySelector('input[name="page_url"]').value = window.location.href;
+    }
+    showStep(5);
+  }
+
+  // Enable submit when consent ticked
+  var consent = document.getElementById("gq-consent");
+  var submitBtn = document.getElementById("gst-submit-btn");
+  consent.addEventListener("change", function(){ submitBtn.disabled = !consent.checked; });
+
+  function collectPayload(){
+    var fd = new FormData(form);
+    var obj = {};
+    fd.forEach(function(v,k){ obj[k] = v; });
+    obj.email_consent = consent.checked;
+    obj.test_lead = obj.test_lead === "true";
+    obj.form_name = "gst-qualifier-form";
+    return obj;
+  }
+
+  function postJson(url, payload){
+    return fetch(url, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload),
+      keepalive:true
+    });
+  }
+
+  function fallbackMailto(payload){
+    var body = "GST qualifier lead POST failed. Payload:%0D%0A%0D%0A" + encodeURIComponent(JSON.stringify(payload, null, 2));
+    window.location.href = "mailto:" + FALLBACK_EMAIL + "?subject=GST%20qualifier%20lead%20(webhook%20fallback)&body=" + body;
+  }
+
+  function showError(msg){
+    var el = document.getElementById("gst-form-error");
+    if(!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+  }
+
+  function setSubmitting(sub){
+    if(sub){
+      submitBtn.dataset.originalLabel = submitBtn.textContent.trim();
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending…";
+    } else {
+      submitBtn.disabled = false;
+      submitBtn.textContent = submitBtn.dataset.originalLabel || "See my result";
+    }
+  }
+
+  form.addEventListener("submit", async function(e){
+    e.preventDefault();
+    // Honeypot
+    var honey = form.querySelector('input[name="website_url"]');
+    if(honey && honey.value.trim().length > 0) return;
+    // Turnstile
+    var tokenInput = form.querySelector('input[name="turnstile_token"]');
+    if(!tokenInput || !tokenInput.value){
+      showError("Please complete the security check and try again.");
       return;
     }
-    var start = currentDisplayed, dur = 220, t0 = performance.now();
-    function tick(now){
-      var t = Math.min((now-t0)/dur, 1);
-      var eased = 1 - Math.pow(1-t, 3);
-      var val = start + (target-start)*eased;
-      rebateEl.textContent = fmt(val);
-      if(t<1) requestAnimationFrame(tick); else { currentDisplayed = target; rebateEl.classList.toggle("zero", target === 0); }
+    // Native validation
+    if(!form.reportValidity()) return;
+
+    var eventId = uuidv4();
+    form.querySelector('input[name="event_id"]').value = eventId;
+    var payload = collectPayload();
+    setSubmitting(true);
+
+    var res;
+    try {
+      res = await postJson(WEBHOOK_URL, payload);
+      if(!res.ok) throw new Error("non-2xx: " + res.status);
+    } catch(err1){
+      try {
+        await new Promise(function(r){ setTimeout(r, 800); });
+        res = await postJson(WEBHOOK_URL, payload);
+        if(!res.ok) throw new Error("retry non-2xx: " + res.status);
+      } catch(err2){
+        if(window.MartellTracking) window.MartellTracking.dispatch("form_submit_error", { reason:String(err2), form_name:"gst-qualifier-form" });
+        setSubmitting(false);
+        showError("Something went wrong. Call us at [phone] or try again.");
+        fallbackMailto(payload);
+        return;
+      }
     }
-    requestAnimationFrame(tick);
-  }
 
-  function updateFillPct(price){
-    var pct = ((price - MIN) / (MAX - MIN)) * 100;
-    slider.style.setProperty("--fill", pct + "%");
-  }
+    // Success — fire tracking (single Meta Lead fire via leadSuccess dedupes by event_id)
+    if(window.MartellTracking) window.MartellTracking.leadSuccess(eventId, payload);
+    // Also emit a qualifier-specific event with the qualified flag for GTM routing
+    if(window.MartellTracking) window.MartellTracking.dispatch("gst_qualifier_submit", { qualified: payload.qualified, event_id: eventId });
 
-  var trackTimer = null;
-  function fireTrack(price, rebate){
-    if(trackTimer) clearTimeout(trackTimer);
-    trackTimer = setTimeout(function(){
-      priceInput.setAttribute("data-price", String(price));
-      priceInput.setAttribute("data-rebate", String(Math.round(rebate/100)*100));
-      // synthesize a click on itself so tracking.js data-track picks it up? tracking.js listens for element clicks with data-track.
-      // Instead we dispatch a custom event that tracking.js can also observe if wired — but for now the attributes update; the event listener in tracking.js already handles clicks on this element.
-    }, 300);
-  }
-
-  function setPrice(price, opts){
-    opts = opts || {};
-    price = Math.max(MIN, Math.min(MAX, Math.round(price/STEP)*STEP));
-    if(!opts.silent) priceInput.value = fmt(price);
-    slider.value = String(price);
-    updateFillPct(price);
-    var rebate = calcRebate(price);
-    var rounded = Math.round(rebate/100)*100;
-    animateTo(rounded);
-    ctx.textContent = contextFor(price);
-    fireTrack(price, rounded);
-  }
-
-  slider.addEventListener("input", function(){ setPrice(parseInt(slider.value,10)); });
-  priceInput.addEventListener("input", function(){
-    var v = parsePrice(priceInput.value);
-    if(v>=MIN && v<=MAX){ slider.value = String(v); updateFillPct(v); var r = calcRebate(v); animateTo(Math.round(r/100)*100); ctx.textContent = contextFor(v); fireTrack(v, r); }
+    // Swap to success step in-modal (no thank-you redirect)
+    var qualified = payload.qualified === "yes";
+    var sh = document.getElementById("qmodal-success-h");
+    var sp = document.getElementById("qmodal-success-p");
+    if(qualified){
+      sh.textContent = "Looks promising.";
+      sp.textContent = "A Martell advisor will confirm your exact savings and next steps.";
+    } else {
+      sh.textContent = "Got it — we'll be in touch.";
+      sp.textContent = "A Martell advisor will still reach out to run the New Housing Rebate numbers with you.";
+    }
+    setSubmitting(false);
+    showStep(6);
   });
-  priceInput.addEventListener("blur", function(){ setPrice(parsePrice(priceInput.value)); });
-  priceInput.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); priceInput.blur(); } });
-  minus.addEventListener("click", function(){ setPrice(parseInt(slider.value,10) - STEP); });
-  plus.addEventListener("click", function(){ setPrice(parseInt(slider.value,10) + STEP); });
-
-  // initial fill
-  updateFillPct(380000);
 })();
 
 /* ===== Testimonial video swap ===== */
