@@ -30,7 +30,7 @@
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+})(window,document,'script','dataLayer','GTM-TLLRJN3S');</script>
 <!-- Meta Pixel -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -171,7 +171,7 @@ a{color:inherit;text-decoration:none}
 .hero-h1{font-family:var(--serif);font-weight:500;font-size:clamp(3rem,9vw,8.5rem);line-height:0.94;letter-spacing:-0.025em;margin-top:1.5rem;color:var(--whitish);text-wrap:balance}
 .hero-sub{margin-top:2rem;max-width:38rem;font-size:1.125rem;line-height:1.7;color:rgba(237,246,244,0.9);text-wrap:pretty}
 .hero-cta-wrap{margin-top:3rem;display:flex;gap:1.25rem;flex-wrap:wrap;align-items:center}
-#hero-b{display:none}
+#hero-b[hidden]{display:none}
 .hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:0.9rem;color:rgba(237,246,244,0.7);font-size:0.72rem;letter-spacing:0.32em;text-transform:uppercase;animation:heroScrollFade 3.6s ease-in-out infinite}
 @keyframes heroScrollFade{0%,100%{opacity:0.55}50%{opacity:1}}
 .hero-scroll::before{content:"";width:1px;height:3rem;background:linear-gradient(to bottom,transparent,rgba(237,246,244,0.7));display:block}
@@ -381,7 +381,7 @@ body.qmodal-locked{overflow:hidden}
 </style>
 </head>
 <body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLLRJN3S" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- NAV -->
 <nav class="nav" id="nav" aria-label="Primary">
@@ -420,7 +420,7 @@ body.qmodal-locked{overflow:hidden}
       <div id="hero-a" data-variant="lifestyle">
         <h1 class="hero-h1" data-reveal style="transition-delay:120ms">Your first <em class="italic-teal">custom</em> home.</h1>
       </div>
-      <div id="hero-b" data-variant="search">
+      <div id="hero-b" data-variant="search" hidden>
         <h1 class="hero-h1" data-reveal style="transition-delay:120ms">Custom-built new homes for your first home in <em class="italic-teal">New Brunswick</em> — starting in the $[range]s.</h1>
       </div>
       <p class="hero-sub" data-reveal style="transition-delay:240ms">Built with a Martell team that stays with you from land to keys, across five communities in New Brunswick — where first-time buyers plan the home they want, not settle for the one that fits.</p>
@@ -704,8 +704,8 @@ body.qmodal-locked{overflow:hidden}
 
         <form id="gst-qualifier-form" class="qmodal-form" novalidate>
           <div class="field">
-            <label for="gq-name">Name <span class="req">*</span></label>
-            <input id="gq-name" type="text" name="name" required autocomplete="name" placeholder="Your name">
+            <label for="gq-name">First name <span class="req">*</span></label>
+            <input id="gq-name" type="text" name="first_name" required autocomplete="given-name" placeholder="Your first name">
             <span class="field-underline" aria-hidden="true"></span>
           </div>
           <div class="field">
@@ -746,6 +746,7 @@ body.qmodal-locked{overflow:hidden}
           <input type="hidden" name="gclid" value="">
           <input type="hidden" name="gbraid" value="">
           <input type="hidden" name="wbraid" value="">
+          <input type="hidden" name="fbclid" value="">
           <input type="hidden" name="utm_source" value="">
           <input type="hidden" name="utm_medium" value="">
           <input type="hidden" name="utm_campaign" value="">
@@ -780,7 +781,7 @@ body.qmodal-locked{overflow:hidden}
           <h4 class="qmodal-result-h" id="qmodal-success-h">Looks promising.</h4>
           <p class="qmodal-result-p" id="qmodal-success-p">A Martell advisor will confirm your exact savings and next steps.</p>
           <div class="qmodal-result-ctas">
-            <a class="gst-cta" href="tel:[phone]" data-track="gst_qualifier_call" data-event="select_content" data-link-id="phone">
+            <a class="gst-cta" href="tel:+15068715237" data-track="gst_qualifier_call" data-event="select_content" data-link-id="phone">
               Talk to Pierre now
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
@@ -874,6 +875,7 @@ body.qmodal-locked{overflow:hidden}
         <input type="hidden" name="gclid" value="">
         <input type="hidden" name="gbraid" value="">
         <input type="hidden" name="wbraid" value="">
+        <input type="hidden" name="fbclid" value="">
         <input type="hidden" name="utm_source" value="">
         <input type="hidden" name="utm_medium" value="">
         <input type="hidden" name="utm_campaign" value="">
@@ -918,7 +920,7 @@ body.qmodal-locked{overflow:hidden}
       </div>
 
       <noscript>
-        <p class="noscript-fallback">JavaScript is required to submit this form. Call us at [phone] or reach out through martellcustomhomes.com.</p>
+        <p class="noscript-fallback">JavaScript is required to submit this form. Call us at (506) 871-5237 or reach out through martellcustomhomes.com.</p>
       </noscript>
     </div>
   </div>
@@ -940,7 +942,7 @@ body.qmodal-locked{overflow:hidden}
     <div>
       <p class="footer-h">Contact</p>
       <div class="footer-list">
-        <a href="tel:[phone]">[phone]</a>
+        <a href="tel:+15068715237">(506) 871-5237</a>
         <a href="mailto:hello@martellcustomhomes.com">hello@martellcustomhomes.com</a>
         <span>331 Elmwood Drive, Suite 4-233<br>Moncton, NB E1A 7Y1</span>
       </div>
@@ -1192,7 +1194,7 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
   var form = document.getElementById("gst-qualifier-form");
   if(!modal || !form) return;
 
-  var WEBHOOK_URL = "PASTE_WEBHOOK_URL_BEFORE_BUILD";
+  var WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/ZxT1vLFYvKhS8heC1yPX/webhook-trigger/edf11371-b408-47e7-b37e-08973a9c68ea";
   var FALLBACK_EMAIL = "pierre@themartellexperience.com";
 
   var steps = modal.querySelectorAll(".qmodal-step");
@@ -1363,7 +1365,7 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
     // copy attribution from main form (populated by attribution.js)
     var main = document.getElementById("lead-form");
     if(main){
-      ["page_url","gclid","gbraid","wbraid","utm_source","utm_medium","utm_campaign","utm_term","utm_content","test_lead"].forEach(function(k){
+      ["page_url","page_variant","gclid","gbraid","wbraid","fbclid","utm_source","utm_medium","utm_campaign","utm_term","utm_content","test_lead"].forEach(function(k){
         var src = main.querySelector('input[name="'+k+'"]');
         var dst = form.querySelector('input[name="'+k+'"]');
         if(src && dst) dst.value = src.value;
@@ -1456,7 +1458,7 @@ var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion:re
       } catch(err2){
         if(window.MartellTracking) window.MartellTracking.dispatch("form_submit_error", { reason:String(err2), form_name:"gst-qualifier-form" });
         setSubmitting(false);
-        showError("Something went wrong. Call us at [phone] or try again.");
+        showError("Something went wrong. Call us at (506) 871-5237 or try again.");
         fallbackMailto(payload);
         return;
       }

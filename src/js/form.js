@@ -1,6 +1,6 @@
 (function () {
   "use strict";
-  var WEBHOOK_URL = "PASTE_WEBHOOK_URL_BEFORE_BUILD";
+  var WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/ZxT1vLFYvKhS8heC1yPX/webhook-trigger/edf11371-b408-47e7-b37e-08973a9c68ea";
   var FALLBACK_EMAIL = "pierre@themartellexperience.com";
   var THANK_YOU_URL = "/thank-you.html";
 
@@ -94,7 +94,7 @@
       } catch (err2) {
         if (window.MartellTracking) window.MartellTracking.dispatch("form_submit_error", { reason: String(err2) });
         setSubmitting(btn, false);
-        showError("Something went wrong. Call us at [phone] or try again.");
+        showError("Something went wrong. Call us at (506) 871-5237 or try again.");
         fallbackMailto(payload);
         return;
       }
