@@ -26,6 +26,7 @@ if (/fbq\(\s*['"](?:init|track)['"]\s*,\s*['"](?:\d|Lead)/.test(out)) {
 
 mkdirSync(join(root, "dist"), { recursive: true });
 writeFileSync(join(root, "dist/martell-fthb-lp-ghl-paste.html"), out);
+writeFileSync(join(root, "dist/index.html"), out);               // GitHub Pages entry (self-contained)
 writeFileSync(join(root, "public/_preview.html"), out);          // local browser check (gitignored)
-writeFileSync(join(root, "../martell-fthb-lp-ghl-paste.html"), out); // refresh the known sibling path
-console.log(`built dist/martell-fthb-lp-ghl-paste.html (${out.length} bytes)`);
+try { writeFileSync(join(root, "../martell-fthb-lp-ghl-paste.html"), out); } catch {} // sibling copy if writable (skipped in CI)
+console.log(`built dist/index.html + ghl-paste (${out.length} bytes)`);
