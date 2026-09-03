@@ -1466,9 +1466,357 @@ function playTestimonial(){
 }
 </script>
 
-<script src="/js/hero-variant.js" defer></script>
-<script src="/js/attribution.js" defer></script>
-<script src="/js/tracking.js" defer></script>
-<script src="/js/form.js" defer></script>
+<script>
+(function () {
+  "use strict";
+  function init() {
+    var v = new URLSearchParams(location.search).get("v");
+    var showB = v === "search";
+    var a = document.getElementById("hero-a");
+    var b = document.getElementById("hero-b");
+    if (a) a.hidden = showB;
+    if (b) b.hidden = !showB;
+    window.__pageVariant = showB ? "search" : "lifestyle";
+
+    // iOS Low Power / autoplay-blocked play button
+    var video = document.getElementById("hero-video");
+    var btn = document.getElementById("hero-play-btn");
+    if (!video || !btn) return;
+    video.addEventListener("loadeddata", function () {
+      if (video.paused) {
+        btn.hidden = false;
+        btn.addEventListener("click", function () {
+          video.play().then(function () { btn.hidden = true; }).catch(function () {});
+        });
+      }
+    });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+<script>
+(function () {
+  "use strict";
+  var COOKIE = "_mfa";
+  var TTL_DAYS = 90;
+  var CLICK_ID_KEYS = ["gclid", "gbraid", "wbraid", "fbclid"];
+  var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+  var SOCIAL_HOSTS = ["instagram.com", "l.instagram.com", "tiktok.com", "facebook.com", "l.facebook.com", "m.facebook.com", "t.co"];
+
+  function readCookie(name) {
+    var m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+    if (!m) return null;
+    try { return JSON.parse(decodeURIComponent(m[1])); } catch (e) { return null; }
+  }
+  function writeCookie(name, obj, days) {
+    var d = new Date(); d.setTime(d.getTime() + days * 864e5);
+    document.cookie = name + "=" + encodeURIComponent(JSON.stringify(obj))
+      + "; expires=" + d.toUTCString() + "; path=/; SameSite=Lax";
+  }
+  function referrerHost() {
+    if (!document.referrer) return "";
+    try { return new URL(document.referrer).hostname.toLowerCase(); } catch (e) { return ""; }
+  }
+  function hostMatchesSocial(host) {
+    if (!host) return false;
+    return SOCIAL_HOSTS.some(function (h) { return host === h || host.endsWith("." + h); });
+  }
+
+  function capture(searchStr, referrer, existing) {
+    // Pure function for testability. Takes inputs, returns new blob.
+    var params = new URLSearchParams(searchStr || "");
+    var blob = existing ? Object.assign({}, existing) : {};
+
+    CLICK_ID_KEYS.forEach(function (k) {
+      var v = params.get(k);
+      if (v) blob[k] = v;
+    });
+    UTM_KEYS.forEach(function (k) {
+      var v = params.get(k);
+      if (v) blob[k] = v;
+    });
+
+    // Social-referrer fallback: only when all UTMs empty AND no gclid/fbclid
+    var utmsEmpty = UTM_KEYS.every(function (k) { return !blob[k]; });
+    var noPaidClickId = !blob.gclid && !blob.fbclid;
+    if (utmsEmpty && noPaidClickId) {
+      var host = "";
+      try { host = referrer ? new URL(referrer).hostname.toLowerCase() : ""; } catch (e) {}
+      if (hostMatchesSocial(host)) {
+        blob.utm_source = "organic_social";
+      }
+    }
+    return blob;
+  }
+
+  function populateForm(blob) {
+    var form = document.getElementById("lead-form");
+    if (!form) return;
+    Object.keys(blob).forEach(function (k) {
+      var input = form.querySelector('input[name="' + k + '"]');
+      if (input) input.value = blob[k];
+    });
+    var pageUrlInput = form.querySelector('input[name="page_url"]');
+    if (pageUrlInput) pageUrlInput.value = location.href;
+    var pageVariantInput = form.querySelector('input[name="page_variant"]');
+    if (pageVariantInput) pageVariantInput.value = window.__pageVariant || "lifestyle";
+  }
+
+  function init() {
+    var existing = readCookie(COOKIE) || {};
+    var blob = capture(location.search, document.referrer, existing);
+    writeCookie(COOKIE, blob, TTL_DAYS);
+    populateForm(blob);
+    window.MartellAttribution = { get: function () { return blob; } };
+  }
+
+  // Export pure fn for tests (node) via export-when-module pattern
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = { capture: capture, hostMatchesSocial: hostMatchesSocial };
+  } else {
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+  }
+})();
+
+</script>
+<script>
+(function () {
+  "use strict";
+  window.dataLayer = window.dataLayer || [];
+
+  function dispatch(name, data) {
+    var evt = Object.assign({ event: name }, data || {});
+    if (evt.page_variant === undefined) evt.page_variant = window.__pageVariant || "lifestyle";
+    window.dataLayer.push(evt);
+  }
+
+  function leadSuccess(eventId, payload) {
+    // GTM
+    dispatch("generate_lead", { event_id: eventId });
+    // Meta Pixel — single fire, dedupe via eventID
+    if (window.fbq) {
+      window.fbq("track", "Lead", {}, { eventID: eventId });
+    }
+  }
+
+  // Bind data-track anchors + accordions
+  function bindTrackers() {
+    document.querySelectorAll("[data-track]").forEach(function (el) {
+      var eventName = el.getAttribute("data-track");
+      if (el.tagName === "DETAILS") {
+        el.addEventListener("toggle", function () {
+          if (el.open) dispatch(eventName, { faq_id: el.getAttribute("data-faq-id") });
+        });
+      } else {
+        el.addEventListener("click", function () {
+          var data = {};
+          var community = el.getAttribute("data-community");
+          if (community) data.community = community;
+          dispatch(eventName, data);
+        });
+      }
+    });
+  }
+
+  // Form-start (first field focus)
+  function bindFormStart() {
+    var form = document.getElementById("lead-form");
+    if (!form) return;
+    var fired = false;
+    form.addEventListener("focusin", function () {
+      if (fired) return;
+      fired = true;
+      dispatch("form_start");
+    }, { once: false });
+  }
+
+  // Scroll depth 25/50/75/100
+  function bindScrollDepth() {
+    var thresholds = [25, 50, 75, 100];
+    var fired = {};
+    window.addEventListener("scroll", function () {
+      var scrolled = (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100;
+      thresholds.forEach(function (t) {
+        if (!fired[t] && scrolled >= t) {
+          fired[t] = true;
+          dispatch("scroll_depth", { depth: t });
+        }
+      });
+    }, { passive: true });
+  }
+
+  // Hero video 50% played
+  function bindVideoPlayed() {
+    var v = document.getElementById("hero-video");
+    if (!v) return;
+    var fired = false;
+    v.addEventListener("timeupdate", function () {
+      if (!fired && v.duration && v.currentTime / v.duration >= 0.5) {
+        fired = true;
+        dispatch("hero_video_played");
+      }
+    });
+  }
+
+  function init() {
+    bindTrackers();
+    bindFormStart();
+    bindScrollDepth();
+    bindVideoPlayed();
+    // Thank-you page emits lead_thankyou_view (internal only, NOT a Meta Lead)
+    if (location.pathname.endsWith("/thank-you.html")) {
+      dispatch("lead_thankyou_view");
+    }
+  }
+
+  window.MartellTracking = { dispatch: dispatch, leadSuccess: leadSuccess };
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+
+</script>
+<script>
+(function () {
+  "use strict";
+  var WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/ZxT1vLFYvKhS8heC1yPX/webhook-trigger/edf11371-b408-47e7-b37e-08973a9c68ea";
+  var FALLBACK_EMAIL = "pierre@themartellexperience.com";
+
+  function uuidv4() {
+    // RFC 4122 v4, crypto-strong when available
+    if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+    // Fallback
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+      var r = (Math.random() * 16) | 0, v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+
+  function collectPayload(form) {
+    var fd = new FormData(form);
+    var obj = {};
+    fd.forEach(function (v, k) { obj[k] = v; });
+    // Coerce booleans
+    obj.email_consent = form.querySelector('input[name="email_consent"]').checked;
+    obj.sms_consent = form.querySelector('input[name="sms_consent"]') && form.querySelector('input[name="sms_consent"]').checked || false;
+    obj.test_lead = obj.test_lead === "true";
+    return obj;
+  }
+
+  function postJson(url, payload) {
+    return fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true
+    });
+  }
+
+  function fallbackMailto(payload) {
+    var body = "Lead POST to webhook failed. Payload:%0D%0A%0D%0A" + encodeURIComponent(JSON.stringify(payload, null, 2));
+    window.location.href = "mailto:" + FALLBACK_EMAIL + "?subject=FTHB%20LP%20lead%20(webhook%20fallback)&body=" + body;
+  }
+
+  function showError(msg) {
+    var el = document.getElementById("form-error");
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+  }
+
+  function setSubmitting(btn, submitting) {
+    if (submitting) {
+      btn.dataset.originalLabel = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+    } else {
+      btn.disabled = false;
+      btn.textContent = btn.dataset.originalLabel || "Start my custom home";
+    }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    var form = e.target;
+    var btn = document.getElementById("submit-btn");
+
+    // Honeypot check
+    var honey = form.querySelector('input[name="website_url"]');
+    if (honey && honey.value.trim().length > 0) return; // silent reject
+
+    // Native validation (button only enables after consent; guard required fields)
+    if (typeof form.reportValidity === "function" && !form.reportValidity()) return;
+
+    // Assign event_id
+    var eventIdInput = form.querySelector('input[name="event_id"]');
+    var eventId = uuidv4();
+    eventIdInput.value = eventId;
+
+    var payload = collectPayload(form);
+    setSubmitting(btn, true);
+
+    var res;
+    try {
+      res = await postJson(WEBHOOK_URL, payload);
+      if (!res.ok) throw new Error("non-2xx: " + res.status);
+    } catch (err1) {
+      // Retry once
+      try {
+        await new Promise(function (r) { setTimeout(r, 800); });
+        res = await postJson(WEBHOOK_URL, payload);
+        if (!res.ok) throw new Error("retry non-2xx: " + res.status);
+      } catch (err2) {
+        if (window.MartellTracking) window.MartellTracking.dispatch("form_submit_error", { reason: String(err2) });
+        setSubmitting(btn, false);
+        showError("Something went wrong. Call us at (506) 871-5237 or try again.");
+        fallbackMailto(payload);
+        return;
+      }
+    }
+
+    // Success — fire tracking, show inline confirmation (single GHL page, no redirect)
+    if (window.MartellTracking) window.MartellTracking.leadSuccess(eventId, payload);
+    var success = document.getElementById("lead-success");
+    if (success) {
+      form.hidden = true;
+      success.hidden = false;
+      success.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+
+  function init() {
+    var form = document.getElementById("lead-form");
+    if (!form) return;
+
+    var emailConsent = document.getElementById("consent-email");
+    var submit = document.getElementById("submit-btn");
+    var phone = form.querySelector('input[name="phone"]');
+    var smsWrap = document.getElementById("sms-consent-wrap");
+    if (emailConsent && submit) {
+      emailConsent.addEventListener("change", function () { submit.disabled = !emailConsent.checked; });
+    }
+    if (phone && smsWrap) {
+      phone.addEventListener("input", function () { smsWrap.hidden = phone.value.trim().length === 0; });
+    }
+
+    form.addEventListener("submit", handleSubmit);
+  }
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = { uuidv4: uuidv4, collectPayload: collectPayload };
+  } else {
+    window.MartellForm = { uuidv4: uuidv4 };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+  }
+})();
+
+</script>
 </body>
 </html>

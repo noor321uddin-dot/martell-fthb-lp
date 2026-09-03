@@ -2,7 +2,6 @@
   "use strict";
   var WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/ZxT1vLFYvKhS8heC1yPX/webhook-trigger/edf11371-b408-47e7-b37e-08973a9c68ea";
   var FALLBACK_EMAIL = "pierre@themartellexperience.com";
-  var THANK_YOU_URL = "/thank-you.html";
 
   function uuidv4() {
     // RFC 4122 v4, crypto-strong when available
@@ -66,12 +65,8 @@
     var honey = form.querySelector('input[name="website_url"]');
     if (honey && honey.value.trim().length > 0) return; // silent reject
 
-    // Ensure Turnstile token present
-    var tokenInput = form.querySelector('input[name="turnstile_token"]');
-    if (!tokenInput || !tokenInput.value) {
-      showError("Please complete the security check and try again.");
-      return;
-    }
+    // Native validation (button only enables after consent; guard required fields)
+    if (typeof form.reportValidity === "function" && !form.reportValidity()) return;
 
     // Assign event_id
     var eventIdInput = form.querySelector('input[name="event_id"]');
@@ -100,9 +95,14 @@
       }
     }
 
-    // Success — fire tracking, redirect
+    // Success — fire tracking, show inline confirmation (single GHL page, no redirect)
     if (window.MartellTracking) window.MartellTracking.leadSuccess(eventId, payload);
-    window.location.href = THANK_YOU_URL;
+    var success = document.getElementById("lead-success");
+    if (success) {
+      form.hidden = true;
+      success.hidden = false;
+      success.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   }
 
   function init() {

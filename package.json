@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "build": "node build.mjs",
     "serve": "python -m http.server 8000 --directory public",
     "test": "node --test src/js/*.test.mjs"
   }

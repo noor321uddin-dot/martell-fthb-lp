@@ -35,8 +35,18 @@ test("both forms carry the fields the loop copies", () => {
   }
 });
 
-test("no visitor-facing placeholders ship", () => {
-  for (const ph of ["[phone]", "GTM-XXXXXXX"]) {
+test("no visitor-facing placeholders or launch-blockers ship", () => {
+  // [phone]/GTM = visible junk; the rest silently break lead flow or tracking.
+  for (const ph of ["[phone]", "GTM-XXXXXXX", "[range]", "[CANONICAL_URL]", "META_PIXEL_ID", "TURNSTILE_SITE_KEY"]) {
     assert.ok(!html.includes(ph), `${ph} still present`);
   }
+});
+
+test("Meta pixel is loaded once (via GTM) — no inline re-init that double-fires PageView", () => {
+  assert.ok(!/fbq\(\s*['"]init['"]/.test(html), "inline fbq('init') re-inits the GTM pixel → duplicate PageView");
+});
+
+test("neither form gates submit on a Turnstile token (no valid sitekey at launch)", () => {
+  assert.ok(!html.includes("turnstile-container"), "Turnstile mount left in markup");
+  assert.ok(!/complete the security check/i.test(html), "Turnstile token gate still blocks submit");
 });
