@@ -9,12 +9,12 @@
   }
 
   function leadSuccess(eventId, payload) {
-    // GTM
+    // GTM (GTM-TLLRJN3S) owns the Meta pixel: base + PageView + the Lead tag,
+    // which fires off this generate_lead event. Do NOT fire a Meta Lead inline
+    // here too — that double-fired Lead (GTM's copy carried no eventID, so the
+    // two never deduped). event_id rides along for CAPI dedupe once GTM maps it
+    // (Meta CAPI is Phase 2 w/ Omar).
     dispatch("generate_lead", { event_id: eventId });
-    // Meta Pixel — single fire, dedupe via eventID
-    if (window.fbq) {
-      window.fbq("track", "Lead", {}, { eventID: eventId });
-    }
   }
 
   // Bind data-track anchors + accordions

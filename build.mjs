@@ -19,6 +19,10 @@ const out = tpl.replace(
 for (const bad of ['src="/js/', "META_PIXEL_ID", "TURNSTILE_SITE_KEY", "[range]", "[CANONICAL_URL]"]) {
   if (out.includes(bad)) throw new Error(`build: leftover "${bad}" in output — fix the source, do not ship`);
 }
+// GTM owns the Meta pixel; no inline fbq init/Lead (both double-fire).
+if (/fbq\(\s*['"](?:init|track)['"]\s*,\s*['"](?:\d|Lead)/.test(out)) {
+  throw new Error("build: inline fbq init/Lead in output — GTM owns the pixel, remove it");
+}
 
 mkdirSync(join(root, "dist"), { recursive: true });
 writeFileSync(join(root, "dist/martell-fthb-lp-ghl-paste.html"), out);
